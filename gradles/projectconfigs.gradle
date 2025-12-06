@@ -1,0 +1,15 @@
+// 项目版本配置
+ext {
+    // SDK 版本
+    compileSdkVersion = 35
+    minSdkVersion = 24
+    targetSdkVersion = 35
+
+    // 应用版本
+    versionCode = 1
+    versionName = "1.0"
+
+    // Java 版本
+    javaVersion = JavaVersion.VERSION_11
+    jvmTarget = "11"
+}

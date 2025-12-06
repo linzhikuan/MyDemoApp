@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GhostTextManager">
+    <option name="inputs">
+      <map>
+        <entry key="* What went wrong:&#10;A problem occurred configuring project ':business:lettin-main'.&#10;&gt; Starting in Kotlin 2.0, the Compose Compiler Gradle plugin is required&#10;  when compose is enabled. See the following link for more information:">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765001875764" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="* What went wrong:&#10;Execution failed for task ':business:lettin-user:kaptDebugKotlin'.&#10;&gt; A failure occurred while executing org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask$KaptExecutionWorkAction">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763880637151" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="&gt; Could not read script '/Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/core/Socket/projectconfigs.gradle' as it does not exist.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780599998" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="@&lt;file_name&gt; 我想把这里面的配置全部放到library.gradle.kts里面进行饮用">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763779846153" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="A problem occurred evaluating script.&#10;&gt; Could not find method minSdk() for arguments [24] on BuildType$AgpDecorated_Decorated{name=defaultConfig, debuggable=false, testCoverageEnabled=false, jniDebuggable=false, pseudoLocalesEnabled=false, renderscriptDebuggable=false, renderscriptOptimLevel=3, minifyEnabled=false, zipAlignEnabled=true, signingConfig=null, embedMicroApp=true, mBuildConfigFields={}, mResValues={}, mProguardFiles=[], mConsumerProguardFiles=[], mManifestPlaceholders={}} of type com.android.build.gradle.internal.dsl.BuildType$AgpDecorated.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780841757" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Cannot get property 'compileSdkVersion' on extra properties extension as it does not exist">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780543844" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Caused by: groovy.lang.MissingPropertyException: Could not set unknown property 'plugin' for project ':business:main' of type org.gradle.api">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763797892435" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Caused by: java.lang.RuntimeException: Manifest merger failed with multiple errors, see logs">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763880754811" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Could not find com.tencent.mars:mars-xlog:1.11.1.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765004712064" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Failed to resolve: com.tencent.mars:mars-xlog:1.11.1">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765004781976" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="[, , 0]:哈哈哈哈 [, , 0]这个是什么意思？">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765005955016" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="appenderOpen传入参数不正确">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765005557826" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="e: file:///Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/core/Socket/build.gradle.kts:4:1: Unresolved reference: android">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780176541" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="e: file:///Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/core/log/src/main/java/com/lzk/core/log/XLogConfig.kt:59:13 Argument type mismatch: actual type is 'kotlin.String', but 'kotlin.Int' was expected.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765005410870" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="e: file:///Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/library.gradle.kts:1:12: Unresolved reference: android">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780008771" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="e: file:///Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/library.gradle.kts:4:1: Unresolved reference: android">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780045432" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="import com.android.build.gradle.LibraryExtension 这个会报错e: file:///Users/linzhikuan/Desktop/dev_env/android_projects/MyDemoApp/library.gradle.kts:1:12: Unresolved reference: android">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763779963379" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="java.lang.NullPointerException">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763801017968" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="java.lang.NullPointerException&#10;java.lang.RuntimeException: java.lang.NullPointerException&#10;&#9;at com.intellij.openapi.application.impl.LaterInvocator.invokeAndWait(LaterInvocator.java:133)&#10;&#9;at com.intellij.openapi.application.impl.ApplicationImpl.invokeAndWait(ApplicationImpl.java:411)&#10;&#9;at com.intellij.openapi.application.impl.ApplicationImpl.invokeAndWait(ApplicationImpl.java:446)&#10;&#9;at com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil.executeOnEdt(ExternalSystemApiUtil.java:394)">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763800476306" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="plugins {&#10;    alias(libs.plugins.android.library)&#10;    alias(libs.plugins.kotlin.android)&#10;}&#10;这个也放进library.gradle里面">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780109784" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="run的时候出现java.lang.NullPointerException">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="2.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763801749179" />
+                  <option value="1763801419692" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="为什么没有打印哈哈哈哈">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765005872685" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="什么时候去flush好一些呢">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765002634321" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="但是进程号和线程号没有打印出来，可以让他不打印[, , 0]这一块吗">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765006112631" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="帮我实现gson相关的工具">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765000271956" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="帮我实现xlog和使用的方法">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1765002265750" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="帮我把版本信息放进@&lt;file_name&gt; 进行引用，还有grales里面的library.gradle里面的 版本号也放进去">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763780407578" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="添加ali arouter的依赖和如何使用的示例">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763790352911" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="添加gson的依赖">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763879317897" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="目录core和common感觉分不清楚有什么区别感觉上一会儿事儿">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763799805234" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="错误: ARouter::Compiler An exception is encountered, [Cannot invoke &quot;javax.lang.model.element.TypeElement.asType()&quot; because the return value of &quot;javax.lang.model.util.Elements.getTypeElement(java.lang.CharSequence)&quot; is null]">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1763880240184" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
