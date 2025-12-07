@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/log" />
+            <option value="$PROJECT_DIR$/core/mmkv" />
             <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/socket" />
             <option value="$PROJECT_DIR$/core/storage" />
