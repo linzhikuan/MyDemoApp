@@ -13,5 +13,5 @@ android {
 
 dependencies {
     // MMKV - 高性能键值存储
-    implementation("com.tencent:mmkv:1.3.9")
+    implementation(libs.mmkv)
 }

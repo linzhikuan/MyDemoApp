@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    api("com.alibaba:arouter-api:1.5.2") {
+    api(libs.arouter.api) {
         exclude(group = "com.android.support")
     }
     api(project(":common:bean"))
