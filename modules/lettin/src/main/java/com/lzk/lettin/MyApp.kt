@@ -6,7 +6,9 @@ import com.lzk.core.log.XLogConfig
 import com.lzk.core.log.logI
 import com.lzk.core.utils.AppUtil
 import com.lzk.core.utils.launch
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()

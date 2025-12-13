@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 apply(from = "${rootProject.projectDir}/gradles/module.gradle")
 android {
@@ -25,4 +27,9 @@ android {
 }
 dependencies {
     implementation(project(":business:lettin-main"))
+    implementation(project(":business:lettin-device"))
+    implementation(project(":business:lettin-user"))
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

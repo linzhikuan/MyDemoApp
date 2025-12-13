@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.lzk.demo.business.MainActivity"
+            android:name="com.lzk.lettin.business.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

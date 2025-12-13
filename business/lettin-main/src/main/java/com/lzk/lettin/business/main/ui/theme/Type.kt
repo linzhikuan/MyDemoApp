@@ -1,4 +1,4 @@
-package com.lzk.demo.business.main.ui.theme
+package com.lzk.lettin.business.main.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

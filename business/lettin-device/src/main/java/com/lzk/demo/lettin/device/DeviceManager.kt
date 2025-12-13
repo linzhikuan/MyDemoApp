@@ -1,11 +1,11 @@
 package com.lzk.demo.lettin.device
 
+import com.lzk.common.bean.device.HqBean
+import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.core.socket.UdpClient
 import com.lzk.core.socket.bean.UdpInfo
 import com.lzk.core.utils.GsonUtils
 import com.lzk.core.utils.Utils
-import com.lzk.common.bean.device.LettinGatewayInfo
-import com.lzk.common.bean.device.HqBean
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
