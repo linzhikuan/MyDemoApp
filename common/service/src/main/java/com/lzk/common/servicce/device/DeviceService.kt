@@ -11,9 +11,7 @@ interface DeviceService : IProvider {
 
     override fun init(context: Context?) {}
 
-    fun syncGateway(): Boolean
+    fun syncGateway()
 }
 
 fun getDeviceService(): DeviceService = ARouter.getInstance().navigation(DeviceService::class.java)
-
-    ?: throw IllegalStateException("DeviceService implementation not found. Make sure ARouter is initialized and the implementation module is included.")

@@ -257,6 +257,209 @@ Logger.d(TAG, "Finished processing all items")
 4. **日志文件位置**：日志文件保存在 `context.getExternalFilesDir(null)/xlog/` 目录下
 5. **应用卸载**：应用卸载时，日志文件会被自动删除
 
+## 如何查看日志文件
+
+### 日志文件位置
+
+日志文件保存在以下目录：
+- **路径**：`/sdcard/Android/data/你的包名/files/xlog/`
+- **文件格式**：`.xlog` 文件（可能经过压缩和加密）
+
+### 方法 1：使用 Android Studio Device File Explorer
+
+1. 打开 Android Studio
+2. 点击 `View` -> `Tool Windows` -> `Device File Explorer`
+3. 导航到 `/sdcard/Android/data/你的包名/files/xlog/`
+4. 右键点击 `.xlog` 文件，选择 `Save As...` 导出到本地
+
+### 方法 2：使用 ADB 命令导出
+
+```bash
+# 查看日志文件列表
+adb shell ls /sdcard/Android/data/你的包名/files/xlog/
+
+# 导出日志文件到本地
+adb pull /sdcard/Android/data/你的包名/files/xlog/ ./logs/
+
+# 导出单个日志文件
+adb pull /sdcard/Android/data/你的包名/files/xlog/xxx.xlog ./
+```
+
+### 方法 3：使用本项目提供的解码脚本（推荐）⭐
+
+本项目提供了一个功能强大的 Python 解码脚本 `decode_xlog.py`，可以批量解码 .xlog 文件。
+
+#### 基本用法
+
+1. **解码当前目录下的所有 .xlog 文件**
+   ```bash
+   # 进入日志文件所在目录
+   cd /path/to/xlog/files
+
+   # 运行解码脚本
+   python3 /path/to/MyDemoApp/core/log/decode_xlog.py
+   ```
+
+2. **解码单个文件**
+   ```bash
+   python3 decode_xlog.py -f app.xlog
+   ```
+
+3. **使用详细模式（推荐用于调试）**
+   ```bash
+   python3 decode_xlog.py -f app.xlog -v
+   ```
+
+4. **使用密钥解码加密的文件**
+   ```bash
+   python3 decode_xlog.py -f app.xlog -k "your_secret_key"
+   ```
+
+5. **批量解码并使用密钥**
+   ```bash
+   python3 decode_xlog.py -d /path/to/logs -k "your_secret_key"
+   ```
+
+6. **查看帮助信息**
+   ```bash
+   python3 decode_xlog.py --help
+   ```
+
+#### 脚本特性
+
+- ✅ 自动解压缩日志文件
+- ✅ 批量处理多个文件
+- ✅ 自动处理编码转换（GBK/UTF-8）
+- ✅ 加密检测和提示
+- ✅ 支持 AES 解密（需要密钥）
+- ✅ 详细的调试信息（-v 参数）
+- ✅ 友好的进度提示
+- ✅ 不会修改原始文件
+
+#### 解码后无法打开？
+
+如果解码后的文件无法打开或显示乱码，请查看 **[解码故障排查指南](./DECODE_GUIDE.md)**，其中包含：
+
+- 🔍 如何检查文件是否加密
+- 🔑 如何找到加密密钥
+- 🛠️ 详细的故障排查步骤
+- 💡 常见问题解决方案
+
+**快速诊断：**
+```bash
+# 使用详细模式查看文件信息
+python3 decode_xlog.py -f your.xlog -v
+```
+
+#### 依赖安装
+
+如果需要解密支持，请安装：
+```bash
+pip3 install pycryptodome
+```
+
+### 方法 4：使用 XLog 官方解码工具
+
+如果日志文件经过加密，可以使用官方解码工具：
+
+1. **下载解码工具**
+   ```bash
+   git clone https://github.com/Tencent/mars.git
+   cd mars/mars/log/crypt
+   ```
+
+2. **解码日志文件**
+   ```bash
+   # Python 2
+   python decode_mars_log_file.py ./xxx.xlog
+
+   # Python 3
+   python3 decode_mars_log_file.py ./xxx.xlog
+   ```
+
+3. **查看解码后的日志**
+
+   解码后会生成 `.log` 文件，可以用任何文本编辑器打开查看。
+
+### 方法 5：在开发模式下使用 Logcat
+
+在 Debug 模式下，日志会同时输出到 Logcat，可以直接在 Android Studio 中实时查看：
+
+1. 打开 Android Studio 的 `Logcat` 窗口
+2. 使用 TAG 过滤日志，例如：`tag:MainActivity`
+3. 实时查看应用日志输出
+
+### 方法 6：在应用内导出日志
+
+可以在应用中添加一个功能按钮，将日志文件分享出来：
+
+```kotlin
+import android.content.Intent
+import androidx.core.content.FileProvider
+import java.io.File
+
+fun shareLogFile(context: Context) {
+    val logDir = XLogConfig.getLogDir(context)
+    val logFiles = logDir.listFiles { file -> file.extension == "xlog" }
+
+    if (logFiles.isNullOrEmpty()) {
+        Toast.makeText(context, "没有找到日志文件", Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    // 获取最新的日志文件
+    val latestLog = logFiles.maxByOrNull { it.lastModified() }
+
+    latestLog?.let { file ->
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            file
+        )
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "application/octet-stream"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(shareIntent, "分享日志文件"))
+    }
+}
+```
+
+**注意**：使用 FileProvider 需要在 `AndroidManifest.xml` 中配置：
+
+```xml
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="${applicationId}.fileprovider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+</provider>
+```
+
+并在 `res/xml/file_paths.xml` 中添加：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path
+        name="xlog"
+        path="xlog/" />
+</paths>
+```
+
+### 日志文件命名规则
+
+XLog 生成的日志文件通常按以下规则命名：
+- 格式：`日期_进程名.xlog`
+- 示例：`20240115_com.example.app.xlog`
+- 每天会生成一个新的日志文件
+
 ## 故障排查
 
 ### 日志文件没有生成
@@ -276,6 +479,12 @@ Logger.d(TAG, "Finished processing all items")
 1. 定期调用 `XLogConfig.cleanOldLogs()` 清理过期日志
 2. 在生产环境中使用较高的日志级别（如 INFO 或 WARNING）
 3. 避免打印大量重复或无用的日志
+
+### 无法查看日志文件内容
+
+1. 如果日志文件是乱码，说明经过了加密，需要使用解码工具
+2. 确保使用正确的解码工具版本
+3. 在开发阶段可以关闭加密功能，方便调试
 
 ## 示例代码
 

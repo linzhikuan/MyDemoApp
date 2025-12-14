@@ -56,7 +56,7 @@ object XLogConfig {
             cacheDir.absolutePath, // 缓存目录
             logDir.absolutePath, // 日志目录
             LOG_PREFIX, // 日志文件名前缀
-            7 // 缓存天数
+            7, // 缓存天数
         )
 
         // 关闭 XLog 的控制台输出，避免 [, , 0] 格式问题

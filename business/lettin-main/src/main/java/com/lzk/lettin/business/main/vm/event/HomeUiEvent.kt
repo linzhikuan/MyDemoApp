@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.vm.event
+package com.lzk.lettin.business.main.vm.event
 
 sealed interface HomeUiEvent {
     object FindHq : HomeUiEvent

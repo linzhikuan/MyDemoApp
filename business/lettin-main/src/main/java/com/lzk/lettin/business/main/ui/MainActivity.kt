@@ -1,4 +1,4 @@
-package com.lzk.lettin.business
+package com.lzk.lettin.business.main.ui
 
 import android.R
 import android.os.Bundle
@@ -21,8 +21,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.lzk.common.bean.device.LettinGatewayInfo
-import com.lzk.lettin.business.screens.HomeScreen
-import com.lzk.lettin.business.screens.settingScreen
+import com.lzk.lettin.business.main.AppNav
+import com.lzk.lettin.business.main.ui.screens.HomeScreen
+import com.lzk.lettin.business.main.ui.screens.settingScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

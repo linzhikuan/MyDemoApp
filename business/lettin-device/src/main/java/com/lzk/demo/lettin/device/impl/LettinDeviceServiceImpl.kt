@@ -12,8 +12,7 @@ class LettinDeviceServiceImpl : DeviceService {
     override val gatewayFlow: SharedFlow<List<LettinGatewayInfo>>
         get() = DeviceManager.instance.gatewayFlow
 
-    override fun syncGateway(): Boolean {
+    override fun syncGateway() {
         DeviceManager.instance.syncGateway()
-        return true
     }
 }

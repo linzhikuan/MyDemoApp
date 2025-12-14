@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.vm.state
+package com.lzk.lettin.business.main.vm.state
 
 import com.lzk.common.bean.device.LettinGatewayInfo
 

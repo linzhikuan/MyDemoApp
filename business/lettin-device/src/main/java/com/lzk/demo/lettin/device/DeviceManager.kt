@@ -2,8 +2,11 @@ package com.lzk.demo.lettin.device
 
 import com.lzk.common.bean.device.HqBean
 import com.lzk.common.bean.device.LettinGatewayInfo
+import com.lzk.core.log.logD
+import com.lzk.core.log.logE
 import com.lzk.core.socket.UdpClient
 import com.lzk.core.socket.bean.UdpInfo
+import com.lzk.core.socket.data.UdpState
 import com.lzk.core.utils.GsonUtils
 import com.lzk.core.utils.Utils
 import kotlinx.coroutines.CoroutineScope
@@ -45,29 +48,42 @@ class DeviceManager {
 
     init {
         scope.launch {
-            udpClient.dataFlow.collect {
-                onUdpData(it)
+            udpClient.stateFlow.collect {
+                logD("udpState:$it")
+                when (it) {
+                    is UdpState.Receive -> onUdpData(it.udpInfo)
+                    is UdpState.OnError -> {
+                        _gatewayFlow.emit(emptyList())
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
 
     fun syncGateway() {
-        gatewayInfos.clear()
-        val tid = Random.nextInt(32767)
-        val cmd = 1
-        runCatching {
-            JSONObject().apply {
-                put("Tid", tid)
-                put("Cmd", cmd)
-                put("Token", "lettintesttokena")
-            }
-        }.onSuccess { params ->
-            scope.launch {
-                val encoder =
-                    DataEncoder.hqDataEncode(params.toString().toByteArray(), cmd, tid).forEach {
+        logD("syncGateway")
+        scope.launch {
+            gatewayInfos.clear()
+            val tid = Random.nextInt(32767)
+            val cmd = 1
+            runCatching {
+                JSONObject().apply {
+                    put("Tid", tid)
+                    put("Cmd", cmd)
+                    put("Token", "lettintesttokena")
+                }
+            }.onSuccess { params ->
+                DataEncoder.hqDataEncode(params.toString().toByteArray(), cmd, tid).forEach {
+                    runCatching {
                         udpClient.send(it, UDP_LOCAL_PORT, BROADCAST_IP, UDP_REMOTE_PORT)
+                    }.onFailure {
+                        logE("send udp error: ${it.message}")
                     }
+                }
                 delay(2000)
+                _gatewayFlow.emit(gatewayInfos.toList())
             }
         }
     }

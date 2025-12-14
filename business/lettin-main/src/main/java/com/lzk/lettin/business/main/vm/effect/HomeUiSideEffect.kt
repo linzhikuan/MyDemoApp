@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.vm.effect
+package com.lzk.lettin.business.main.vm.effect
 
 import com.lzk.common.bean.device.LettinGatewayInfo
 

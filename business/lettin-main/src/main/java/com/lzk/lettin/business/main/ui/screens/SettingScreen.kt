@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.screens
+package com.lzk.lettin.business.main.ui.screens
 
 import androidx.compose.runtime.Composable
 

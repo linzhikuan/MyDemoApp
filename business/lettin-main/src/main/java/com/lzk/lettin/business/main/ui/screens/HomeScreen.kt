@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.screens
+package com.lzk.lettin.business.main.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -23,11 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lzk.common.bean.device.LettinGatewayInfo
-import com.lzk.lettin.business.component.RefreshSample1
-import com.lzk.lettin.business.vm.HomeVM
-import com.lzk.lettin.business.vm.effect.HomeUiSideEffect
-import com.lzk.lettin.business.vm.event.HomeUiEvent
-import com.lzk.lettin.business.vm.state.HomeUiState
+import com.lzk.lettin.business.main.component.RefreshSample1
+import com.lzk.lettin.business.main.vm.HomeVM
+import com.lzk.lettin.business.main.vm.effect.HomeUiSideEffect
+import com.lzk.lettin.business.main.vm.event.HomeUiEvent
+import com.lzk.lettin.business.main.vm.state.HomeUiState
 
 @Suppress("ktlint:standard:function-naming")
 @Composable

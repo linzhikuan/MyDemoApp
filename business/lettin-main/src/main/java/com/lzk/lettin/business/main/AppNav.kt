@@ -1,10 +1,11 @@
-package com.lzk.lettin.business
+package com.lzk.lettin.business.main
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.lzk.lettin.business.screens.loginScreen
+import com.lzk.lettin.business.main.ui.MainScreen
+import com.lzk.lettin.business.main.ui.screens.loginScreen
 
 object Routes {
     const val MAIN = "main"

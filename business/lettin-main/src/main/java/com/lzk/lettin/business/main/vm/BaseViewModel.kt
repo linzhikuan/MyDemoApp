@@ -1,4 +1,4 @@
-package com.lzk.lettin.business.vm
+package com.lzk.lettin.business.main.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
