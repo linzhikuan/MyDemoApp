@@ -69,7 +69,18 @@ fun BottomNavigationBar(navController: NavHostController) {
                 },
                 label = { Text(screen.title) },
                 selected = currentRoute == screen.route,
-                onClick = { navController.navigate(screen.route) },
+                onClick = {
+                    navController.navigate(screen.route) {
+                        // 避免在返回栈中创建多个相同的实例
+                        launchSingleTop = true
+                        // 弹出到起始目的地，避免返回栈堆积
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        // 恢复状态
+                        restoreState = true
+                    }
+                },
             )
         }
     }

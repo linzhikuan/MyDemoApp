@@ -24,6 +24,7 @@ class HomeVM : BaseViewModel<HomeUiState, HomeUiEvent, HomeUiSideEffect>() {
     }
 
     init {
+        logD(TAG, "init")
         observeGateway()
         updateGateway()
     }
