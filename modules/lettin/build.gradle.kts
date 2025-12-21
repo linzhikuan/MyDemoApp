@@ -7,7 +7,9 @@ plugins {
 apply(from = "${rootProject.projectDir}/gradles/module.gradle")
 android {
     namespace = "com.lzk.lettin"
-
+    defaultConfig {
+        applicationId = "com.lzk.lettin"
+    }
     buildTypes {
         debug {
             buildConfigField("Boolean", "isDebug", "true")

@@ -4,3 +4,4 @@ data class LettinGatewayInfo(
     val name: String? = null,
     var mac: String? = null,
 )
+

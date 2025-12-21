@@ -7,64 +7,84 @@ package com.lzk.core.log
 
 /**
  * 为任意类添加日志功能
- * 使用类名作为 TAG
+ * 使用外部传入的 TAG
  */
-inline fun <reified T> T.logV(message: String) {
-    Logger.v(T::class.java.simpleName, message)
+fun logV(
+    tag: String,
+    message: String,
+) {
+    Logger.v(tag, message)
 }
 
-inline fun <reified T> T.logD(message: String) {
-    Logger.d(T::class.java.simpleName, message)
+fun logD(
+    tag: String,
+    message: String,
+) {
+    Logger.d(tag, message)
 }
 
-inline fun <reified T> T.logI(message: String) {
-    Logger.i(T::class.java.simpleName, message)
+fun logI(
+    tag: String,
+    message: String,
+) {
+    Logger.i(tag, message)
 }
 
-inline fun <reified T> T.logW(message: String) {
-    Logger.w(T::class.java.simpleName, message)
+fun logW(
+    tag: String,
+    message: String,
+) {
+    Logger.w(tag, message)
 }
 
-inline fun <reified T> T.logE(message: String) {
-    Logger.e(T::class.java.simpleName, message)
+fun logE(
+    tag: String,
+    message: String,
+) {
+    Logger.e(tag, message)
 }
 
-inline fun <reified T> T.logE(
+fun logE(
+    tag: String,
     message: String,
     throwable: Throwable,
 ) {
-    Logger.e(T::class.java.simpleName, message, throwable)
+    Logger.e(tag, message, throwable)
 }
 
 /**
  * 带格式化参数的日志扩展
  */
-inline fun <reified T> T.logD(
+fun logD(
+    tag: String,
     format: String,
     vararg args: Any?,
 ) {
-    Logger.d(T::class.java.simpleName, format, *args)
+    Logger.d(tag, format, *args)
 }
 
-inline fun <reified T> T.logI(
+fun logI(
+    tag: String,
     format: String,
     vararg args: Any?,
 ) {
-    Logger.i(T::class.java.simpleName, format, *args)
+    Logger.i(tag, format, *args)
 }
 
-inline fun <reified T> T.logW(
+fun logW(
+    tag: String,
     format: String,
     vararg args: Any?,
 ) {
-    Logger.w(T::class.java.simpleName, format, *args)
+    Logger.w(tag, format, *args)
 }
 
-inline fun <reified T> T.logE(
+fun logE(
+    tag: String,
     format: String,
     vararg args: Any?,
 ) {
-    Logger.e(T::class.java.simpleName, format, *args)
+    Logger.e(tag, format, *args)
 }
 
 /**
@@ -83,12 +103,13 @@ inline fun <T> measureTimeWithLog(
 }
 
 /**
- * 使用类名作为 TAG 测量执行时间
+ * 测量执行时间（需要传入 TAG）
  */
-inline fun <reified T, R> T.measureTime(
+inline fun <R> measureTime(
+    tag: String,
     message: String,
     block: () -> R,
-): R = measureTimeWithLog(T::class.java.simpleName, message, block)
+): R = measureTimeWithLog(tag, message, block)
 
 /**
  * 安全执行代码块，捕获异常并记录日志
@@ -106,9 +127,10 @@ inline fun <T> safeExecute(
     }
 
 /**
- * 使用类名作为 TAG 安全执行代码块
+ * 安全执行代码块（需要传入 TAG）
  */
-inline fun <reified T, R> T.safeExecute(
+inline fun <R> safeExecuteWithTag(
+    tag: String,
     defaultValue: R,
     block: () -> R,
-): R = safeExecute(T::class.java.simpleName, defaultValue, block)
+): R = safeExecute(tag, defaultValue, block)

@@ -7,7 +7,7 @@ plugins {
 apply(from = "${rootProject.projectDir}/gradles/library.gradle")
 
 android {
-    namespace = "com.lzk.core.log"
+    namespace = "com.lzk.core.utils"
 }
 
 dependencies {

@@ -10,6 +10,10 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MyApp : Application() {
+    companion object {
+        private const val TAG = "MyApp"
+    }
+
     override fun onCreate() {
         super.onCreate()
         AppUtil.init(this)
@@ -25,7 +29,7 @@ class MyApp : Application() {
         launch {
             AppUtil.crashState.collect {
                 if (it != null) {
-                    logI("Crash occurred: ${it.message}")
+                    logI(TAG, "Crash occurred: ${it.message}")
                     XLogConfig.flushSync()
                 }
             }
@@ -33,7 +37,7 @@ class MyApp : Application() {
 
         launch {
             AppUtil.isAppInForeground.collect {
-                logI("App is ${if (it) "in" else "out"} foreground")
+                logI(TAG, "App is ${if (it) "in" else "out"} foreground")
                 if (!it) {
                     XLogConfig.flush()
                 }

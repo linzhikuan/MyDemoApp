@@ -9,6 +9,10 @@ import com.lzk.lettin.business.main.vm.state.HomeUiState
 import kotlinx.coroutines.launch
 
 class HomeVM : BaseViewModel<HomeUiState, HomeUiEvent, HomeUiSideEffect>() {
+    companion object {
+        private const val TAG = "HomeVM"
+    }
+
     override fun initialState(): HomeUiState = HomeUiState()
 
     override suspend fun handleEvent(event: HomeUiEvent) {
@@ -27,7 +31,7 @@ class HomeVM : BaseViewModel<HomeUiState, HomeUiEvent, HomeUiSideEffect>() {
     private fun observeGateway() {
         viewModelScope.launch {
             getDeviceService().gatewayFlow.collect {
-                logD("gatewayList:$it")
+                logD(TAG, "gatewayList:$it")
                 updateState {
                     copy(gatewayList = it, isFindingHq = false)
                 }
@@ -36,7 +40,7 @@ class HomeVM : BaseViewModel<HomeUiState, HomeUiEvent, HomeUiSideEffect>() {
     }
 
     private fun updateGateway() {
-        logD("updateGateway")
+        logD(TAG, "updateGateway")
         updateState {
             copy(isFindingHq = true)
         }
