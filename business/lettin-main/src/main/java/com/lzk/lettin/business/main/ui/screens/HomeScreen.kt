@@ -23,13 +23,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lzk.common.bean.device.LettinGatewayInfo
-import com.lzk.lettin.business.main.component.RefreshSample1
+import com.lzk.lettin.business.main.component.RefreshSample
 import com.lzk.lettin.business.main.vm.HomeVM
 import com.lzk.lettin.business.main.vm.effect.HomeUiSideEffect
 import com.lzk.lettin.business.main.vm.event.HomeUiEvent
 import com.lzk.lettin.business.main.vm.state.HomeUiState
 
-@Suppress("ktlint:standard:function-naming")
 @Composable
 fun HomeScreen(
     onLoginClick: () -> Unit,
@@ -51,7 +50,6 @@ fun HomeScreen(
     UpdateHomeUi(onLoginClick, onSettingClick, state, vm::onEvent)
 }
 
-@Suppress("ktlint:standard:function-naming")
 @Composable
 private fun UpdateHomeUi(
     onLoginClick: () -> Unit,
@@ -62,12 +60,11 @@ private fun UpdateHomeUi(
     val onRefresh = {
         event(HomeUiEvent.FindHq)
     }
-    RefreshSample1(state.isFindingHq, onRefresh) {
+    RefreshSample(state.isFindingHq, onRefresh) {
         ContentView(onLoginClick, onSettingClick, state.gatewayList ?: listOf(), event)
     }
 }
 
-@Suppress("ktlint:standard:function-naming")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentView(
@@ -96,7 +93,6 @@ private fun ContentView(
     }
 }
 
-@Suppress("ktlint:standard:function-naming")
 @Composable
 private fun HqItem(
     hqData: LettinGatewayInfo,
@@ -110,13 +106,20 @@ private fun HqItem(
             }) {
                 Text(text = "设置")
             }
+            Button(onClick = {
+                onSettingClick(hqData)
+            }) {
+                Text(text = "连接")
+            }
         }
         HorizontalDivider(color = Color.Gray)
     }
 }
 
-@Suppress("ktlint:standard:function-naming")
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun HqItemPreview() {
+    HqItem(LettinGatewayInfo(name = "haha", mac = "haha")) {
+
+    }
 }

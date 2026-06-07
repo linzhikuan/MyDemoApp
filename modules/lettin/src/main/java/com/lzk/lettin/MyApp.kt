@@ -39,7 +39,7 @@ class MyApp : Application() {
             AppUtil.isAppInForeground.collect {
                 logI(TAG, "App is ${if (it) "in" else "out"} foreground")
                 if (!it) {
-                    XLogConfig.flush()
+                    XLogConfig.flushSync()
                 }
             }
         }

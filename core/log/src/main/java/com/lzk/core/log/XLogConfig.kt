@@ -47,16 +47,18 @@ object XLogConfig {
         System.loadLibrary("marsxlog")
 
         val xlog = Xlog()
+
+        // 先设置日志实现
         Log.setLogImp(xlog)
 
-        // 设置日志配置
+        // 设置日志配置 - 使用异步模式，与可解析文件保持一致
         Log.appenderOpen(
             logLevel, // 日志级别
-            Xlog.AppednerModeAsync, // 异步模式
-            cacheDir.absolutePath, // 缓存目录
-            logDir.absolutePath, // 日志目录
+            Xlog.AppednerModeAsync, // 异步模式，与可解析文件保持一致
+            logDir.absolutePath, // 日志目录（第一个路径参数）
+            cacheDir.absolutePath, // 缓存目录（第二个路径参数）
             LOG_PREFIX, // 日志文件名前缀
-            7, // 缓存天数
+            7, // 缓存天数，7天后自动刷新
         )
 
         // 关闭 XLog 的控制台输出，避免 [, , 0] 格式问题
@@ -68,6 +70,9 @@ object XLogConfig {
         Logger.i("XLog", "XLog initialized successfully")
         Logger.i("XLog", "Log directory: ${logDir.absolutePath}")
         Logger.i("XLog", "Cache directory: ${cacheDir.absolutePath}")
+
+        // 立即刷新一次，确保日志文件创建
+        Log.appenderFlush()
     }
 
     /**
@@ -95,7 +100,7 @@ object XLogConfig {
      */
     fun flushSync() {
         if (isInitialized) {
-            Log.appenderFlush()
+            Log.appenderFlushSync(true)
         }
     }
 

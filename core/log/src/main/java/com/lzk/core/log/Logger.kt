@@ -10,6 +10,7 @@ import android.util.Log as AndroidLog
 object Logger {
     // 是否使用 Android 原生 Log 输出到控制台（避免 XLog 的格式问题）
     var useAndroidLogForConsole = true
+
     /**
      * Verbose 级别日志
      */
