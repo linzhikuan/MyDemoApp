@@ -13,7 +13,7 @@ import com.lzk.common.bean.device.LettinGatewayInfo
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
-fun deviceControlScreen(hqData: LettinGatewayInfo,) {
+fun deviceControlScreen(hqData: LettinGatewayInfo) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(modifier = Modifier.weight(1f), text = "name:${hqData.name}")
