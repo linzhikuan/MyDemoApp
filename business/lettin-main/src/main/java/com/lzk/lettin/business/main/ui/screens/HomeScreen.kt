@@ -33,6 +33,7 @@ import com.lzk.lettin.business.main.vm.state.HomeUiState
 fun HomeScreen(
     onLoginClick: () -> Unit,
     onSettingClick: (LettinGatewayInfo) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     val vm: HomeVM = hiltViewModel()
     val state by vm.state.collectAsState()
@@ -47,7 +48,7 @@ fun HomeScreen(
             }
         }
     }
-    UpdateHomeUi(onLoginClick, onSettingClick, state, vm::onEvent)
+    UpdateHomeUi(onLoginClick, onSettingClick, state, vm::onEvent, onDeviceControlClick)
 }
 
 @Composable
@@ -56,12 +57,19 @@ private fun UpdateHomeUi(
     onSettingClick: (LettinGatewayInfo) -> Unit,
     state: HomeUiState,
     event: (HomeUiEvent) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     val onRefresh = {
         event(HomeUiEvent.FindHq)
     }
     RefreshSample(state.isFindingHq, onRefresh) {
-        ContentView(onLoginClick, onSettingClick, state.gatewayList ?: listOf(), event)
+        ContentView(
+            onLoginClick,
+            onSettingClick,
+            state.gatewayList ?: listOf(),
+            event,
+            onDeviceControlClick,
+        )
     }
 }
 
@@ -72,13 +80,14 @@ private fun ContentView(
     onSettingClick: (LettinGatewayInfo) -> Unit,
     hqDataList: List<LettinGatewayInfo>,
     event: (HomeUiEvent) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     val size = hqDataList.size
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         LazyColumn(Modifier.fillMaxSize()) {
             items(hqDataList.size) {
                 val hqData = hqDataList[it]
-                ListItem({ HqItem(hqData, onSettingClick) })
+                ListItem({ HqItem(hqData, onSettingClick, onDeviceControlClick) })
             }
         }
         if (size == 0) {
@@ -97,14 +106,15 @@ private fun ContentView(
 private fun HqItem(
     hqData: LettinGatewayInfo,
     onSettingClick: (LettinGatewayInfo) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(modifier = Modifier.weight(1f), text = "name:${hqData.name}")
             Button(onClick = {
-                onSettingClick(hqData)
+                onDeviceControlClick(hqData)
             }) {
-                Text(text = "设置")
+                Text(text = "控制")
             }
             Button(onClick = {
                 onSettingClick(hqData)
@@ -119,7 +129,12 @@ private fun HqItem(
 @Preview(showBackground = true)
 @Composable
 fun HqItemPreview() {
-    HqItem(LettinGatewayInfo(name = "haha", mac = "haha")) {
-
-    }
+    HqItem(
+        LettinGatewayInfo(
+            name = "haha",
+            mac = "haha",
+        ),
+        onSettingClick = TODO(),
+        onDeviceControlClick = TODO(),
+    )
 }

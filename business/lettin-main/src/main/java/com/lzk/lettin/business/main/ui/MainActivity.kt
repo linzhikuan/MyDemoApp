@@ -41,10 +41,17 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(
     onLoginClick: () -> Unit,
     onSettingClick: (LettinGatewayInfo) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     val navController = rememberNavController()
     Scaffold(bottomBar = { BottomNavigationBar(navController) }) { innerPadding ->
-        NavigationHost(navController, Modifier.padding(innerPadding), onLoginClick, onSettingClick)
+        NavigationHost(
+            navController,
+            Modifier.padding(innerPadding),
+            onLoginClick,
+            onSettingClick,
+            onDeviceControlClick,
+        )
     }
 }
 
@@ -92,13 +99,20 @@ fun NavigationHost(
     modifier: Modifier = Modifier,
     onLoginClick: () -> Unit,
     onSettingClick: (LettinGatewayInfo) -> Unit,
+    onDeviceControlClick: (LettinGatewayInfo) -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
         modifier = modifier,
     ) {
-        composable(Screen.Home.route) { HomeScreen(onLoginClick, onSettingClick) }
+        composable(Screen.Home.route) {
+            HomeScreen(
+                onLoginClick,
+                onSettingClick,
+                onDeviceControlClick,
+            )
+        }
         composable(Screen.Setting.route) {
             settingScreen()
         }

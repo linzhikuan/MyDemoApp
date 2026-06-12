@@ -1,13 +1,11 @@
 package com.lzk.demo.lettin.device
 
-import com.lzk.common.bean.device.HqBean
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.core.log.logD
 import com.lzk.core.log.logE
 import com.lzk.core.socket.UdpClient
 import com.lzk.core.socket.bean.UdpInfo
-import com.lzk.core.utils.GsonUtils
-import com.lzk.core.utils.Utils
+import com.lzk.demo.lettin.device.utils.HqDataHelper.parserToLettin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -73,7 +71,12 @@ class DeviceManager {
                     .hqDataEncode(params.toString().toByteArray(), cmd, tid)
                     .forEach { data ->
                         runCatching {
-                            udpClient.sendMessage(data, BROADCAST_IP, UDP_REMOTE_PORT, UDP_LOCAL_PORT)
+                            udpClient.sendMessage(
+                                data,
+                                BROADCAST_IP,
+                                UDP_REMOTE_PORT,
+                                UDP_LOCAL_PORT,
+                            )
                         }.onFailure {
                             logE(TAG, "send udp error: ${it.message}")
                         }.onSuccess {
@@ -91,19 +94,6 @@ class DeviceManager {
     }
 
     private fun onUdpData(udpInfo: UdpInfo) {
-        runCatching {
-            var mac: String? = null
-            val json = Utils.parasUdpJson(udpInfo.data)
-            logD(TAG, "json:$json")
-            val macBytes = ByteArray(8)
-            System.arraycopy(udpInfo.data, 2, macBytes, 0, 8)
-            mac = Utils.bytesToHexString(macBytes)
-            val hqBean = GsonUtils.fromJson(json, HqBean::class.java)
-            val gatewayInfo =
-                LettinGatewayInfo(name = hqBean?.obj?.name ?: "", mac = mac ?: hqBean?.mac)
-            gatewayInfos.add(gatewayInfo)
-        }.onFailure {
-            logE(TAG, "parse udp data error: ${it.message}")
-        }
+        udpInfo.parserToLettin()?.let { gatewayInfos.add(it) }
     }
 }
