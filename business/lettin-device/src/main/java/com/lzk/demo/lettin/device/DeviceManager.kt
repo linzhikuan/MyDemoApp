@@ -1,11 +1,13 @@
 package com.lzk.demo.lettin.device
 
+import com.lzk.common.bean.device.ConnectionState
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.core.log.logD
 import com.lzk.core.log.logE
 import com.lzk.core.log.logI
 import com.lzk.core.socket.TcpClient
 import com.lzk.core.socket.UdpClient
+import com.lzk.core.socket.bean.TcpState
 import com.lzk.core.socket.bean.UdpInfo
 import com.lzk.demo.lettin.device.utils.HqDataHelper.parserToLettin
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +36,8 @@ class DeviceManager {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val gatewayInfos = CopyOnWriteArrayList<LettinGatewayInfo>()
+    private var currentIp: String? = null
+    private var currentPort: Int? = null
 
     private val udpClient: UdpClient by lazy {
         UdpClient.instance
@@ -51,6 +55,10 @@ class DeviceManager {
     val gatewayFlow: SharedFlow<List<LettinGatewayInfo>>
         get() = _gatewayFlow.asSharedFlow()
 
+    private val _connectionStateFlow = MutableSharedFlow<ConnectionState>(replay = 1)
+    val connectionStateFlow: SharedFlow<ConnectionState>
+        get() = _connectionStateFlow.asSharedFlow()
+
     init {
         scope.launch {
             udpClient.udpDataFlow.collect {
@@ -59,8 +67,36 @@ class DeviceManager {
             }
         }
         scope.launch {
-            tcpClient.state.collect {
-                logD(TAG, "tcpState:$it")
+            tcpClient.state.collect { tcpState ->
+                logD(TAG, "tcpState:$tcpState")
+                val connectionState =
+                    when (tcpState) {
+                        is TcpState.Init -> ConnectionState.Init
+                        is TcpState.Connecting -> ConnectionState.Connecting
+                        is TcpState.ConnectSuccess ->
+                            ConnectionState.Connected(
+                                ip = currentIp ?: "",
+                                port = currentPort ?: 0,
+                            )
+
+                        is TcpState.ConnectFailed ->
+                            ConnectionState.Error(
+                                tcpState.throwable.message ?: "连接失败",
+                            )
+
+                        is TcpState.OnClosed -> ConnectionState.Disconnected(tcpState.throwable?.message)
+                        is TcpState.OnReceiveMsg -> null
+                        is TcpState.OnReceiveMsgFailed ->
+                            ConnectionState.Error(
+                                tcpState.throwable.message ?: "接收消息失败",
+                            )
+
+                        is TcpState.OnSendMsgFailed ->
+                            ConnectionState.Error(
+                                tcpState.throwable.message ?: "发送消息失败",
+                            )
+                    }
+                connectionState?.let { _connectionStateFlow.emit(it) }
             }
         }
     }
@@ -109,6 +145,8 @@ class DeviceManager {
         ip: String,
         port: Int,
     ) {
+        currentIp = ip
+        currentPort = port
         scope.launch {
             tcpClient
                 .connect(ip, port)

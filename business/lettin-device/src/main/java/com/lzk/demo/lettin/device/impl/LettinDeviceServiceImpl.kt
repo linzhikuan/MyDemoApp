@@ -1,6 +1,7 @@
 package com.lzk.demo.lettin.device.impl
 
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.lzk.common.bean.device.ConnectionState
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.common.servicce.CommonServiceConstants
 import com.lzk.common.servicce.device.DeviceService
@@ -11,6 +12,9 @@ import kotlinx.coroutines.flow.SharedFlow
 class LettinDeviceServiceImpl : DeviceService {
     override val gatewayFlow: SharedFlow<List<LettinGatewayInfo>>
         get() = DeviceManager.instance.gatewayFlow
+
+    override val connectionStateFlow: SharedFlow<ConnectionState>
+        get() = DeviceManager.instance.connectionStateFlow
 
     override fun syncGateway() {
         DeviceManager.instance.syncGateway()

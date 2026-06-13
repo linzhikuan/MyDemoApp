@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.lzk.common.bean.device.ConnectionState
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.common.servicce.device.getDeviceService
 import com.lzk.core.log.logI
@@ -45,9 +46,33 @@ class DeviceControlVM
         private val _sideEffect = Channel<DeviceControlSideEffect>()
         val sideEffect = _sideEffect.receiveAsFlow()
 
+        init {
+            subscribeConnectionState()
+        }
+
         fun onEvent(event: DeviceControlEvent) {
             viewModelScope.launch {
                 handleEvent(event)
+            }
+        }
+
+        private fun subscribeConnectionState() {
+            viewModelScope.launch {
+                getDeviceService().connectionStateFlow.collect { connectionState ->
+                    logI(TAG, "connectionState changed: $connectionState")
+                    _state.update { it.copy(connectionState = connectionState) }
+                    when (connectionState) {
+                        is ConnectionState.Connected -> {
+                            sendSideEffect(DeviceControlSideEffect.ShowToast("连接成功"))
+                        }
+
+                        is ConnectionState.Error -> {
+                            sendSideEffect(DeviceControlSideEffect.ShowToast("连接失败: ${connectionState.message}"))
+                        }
+
+                        else -> {}
+                    }
+                }
             }
         }
 
@@ -68,8 +93,6 @@ class DeviceControlVM
             ip: String,
             port: Int,
         ) {
-            _state.update { it.copy(isConnecting = true) }
-            // 发送副作用
             viewModelScope.launch {
                 sendSideEffect(DeviceControlSideEffect.ShowToast("正在连接..."))
             }

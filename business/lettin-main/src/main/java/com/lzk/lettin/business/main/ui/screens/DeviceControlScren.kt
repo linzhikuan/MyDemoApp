@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lzk.common.bean.device.ConnectionState
 import com.lzk.lettin.business.main.vm.DeviceControlVM
 import com.lzk.lettin.business.main.vm.effect.DeviceControlSideEffect
 import com.lzk.lettin.business.main.vm.event.DeviceControlEvent
@@ -47,7 +48,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                     )
                 }
             }) {
-                Text(text = if (state.isConnecting) "连接中..." else "连接")
+                Text(text = if (state.connectionState is ConnectionState.Connecting) "连接中..." else "连接")
             }
         }
         HorizontalDivider(color = Color.Gray)
