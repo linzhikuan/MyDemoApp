@@ -108,13 +108,15 @@ class DeviceManager {
         ip: String,
         port: Int,
     ) {
-        tcpClient
-            .connect(ip, port)
-            .onSuccess {
-                logI(TAG, "connectDevice ip:$ip, port:$port")
-            }.onFailure {
-                logE(TAG, "connectDevice ip:$ip, port:$port failed:", it)
-            }
+        scope.launch {
+            tcpClient
+                .connect(ip, port)
+                .onSuccess {
+                    logI(TAG, "connectDevice ip:$ip, port:$port")
+                }.onFailure {
+                    logE(TAG, "connectDevice ip:$ip, port:$port failed:", it)
+                }
+        }
     }
 
     private fun onUdpData(udpInfo: UdpInfo) {

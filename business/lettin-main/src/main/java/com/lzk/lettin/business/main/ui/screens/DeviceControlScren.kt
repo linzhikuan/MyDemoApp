@@ -1,45 +1,51 @@
 package com.lzk.lettin.business.main.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lzk.common.bean.device.LettinGatewayInfo
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lzk.lettin.business.main.vm.DeviceControlVM
+import com.lzk.lettin.business.main.vm.effect.DeviceControlSideEffect
 import com.lzk.lettin.business.main.vm.event.DeviceControlEvent
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
-fun deviceControlScreen(
-    hqData: LettinGatewayInfo,
-    vm: DeviceControlVM =
-        viewModel(
-            key = hqData.mac,
-        ) {
-            DeviceControlVM(hqData)
-        },
-) {
+fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        vm.sideEffect.collect {
+            when (it) {
+                is DeviceControlSideEffect.ShowToast ->
+                    Toast.makeText(context, it.msg, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(modifier = Modifier.weight(1f), text = "name:${state.gatewayInfo.name}")
+            Text(modifier = Modifier.weight(1f), text = "name:${state.gatewayInfo?.name}")
             Button(onClick = {
-                vm.onEvent(
-                    DeviceControlEvent.Connect(
-                        ip = state.gatewayInfo.ip,
-                        port = state.gatewayInfo.port,
-                    ),
-                )
+                state.gatewayInfo?.let { info ->
+                    vm.onEvent(
+                        DeviceControlEvent.Connect(
+                            ip = info.ip,
+                            port = info.port,
+                        ),
+                    )
+                }
             }) {
                 Text(text = if (state.isConnecting) "连接中..." else "连接")
             }

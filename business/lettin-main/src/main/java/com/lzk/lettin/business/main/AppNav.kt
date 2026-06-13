@@ -1,7 +1,6 @@
 package com.lzk.lettin.business.main
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,11 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
-import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.lettin.business.main.ui.MainScreen
 import com.lzk.lettin.business.main.ui.screens.deviceControlScreen
 import com.lzk.lettin.business.main.ui.screens.loginScreen
-import java.net.URLDecoder
 import java.net.URLEncoder
 
 object Routes {
@@ -50,13 +47,10 @@ fun AppNav() {
             arguments = listOf(
                 navArgument("data") { type = NavType.StringType },
             ),
-        ) { backStackEntry ->
+        ) {
             Scaffold { innerPadding ->
                 Box(modifier = Modifier.padding(innerPadding)) {
-                    val encoded = backStackEntry.arguments?.getString("data") ?: ""
-                    val json = URLDecoder.decode(encoded, "UTF-8")
-                    val hqData = Gson().fromJson(json, LettinGatewayInfo::class.java)
-                    deviceControlScreen(hqData)
+                    deviceControlScreen()
                 }
             }
         }
