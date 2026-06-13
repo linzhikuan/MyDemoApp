@@ -15,4 +15,11 @@ class LettinDeviceServiceImpl : DeviceService {
     override fun syncGateway() {
         DeviceManager.instance.syncGateway()
     }
+
+    override fun connect(
+        ip: String,
+        port: Int,
+    ) {
+        DeviceManager.instance.connectDevice(ip, port)
+    }
 }

@@ -12,6 +12,11 @@ interface DeviceService : IProvider {
     override fun init(context: Context?) {}
 
     fun syncGateway()
+
+    fun connect(
+        ip: String,
+        port: Int,
+    )
 }
 
 fun getDeviceService(): DeviceService = ARouter.getInstance().navigation(DeviceService::class.java)

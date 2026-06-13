@@ -133,6 +133,8 @@ fun HqItemPreview() {
         LettinGatewayInfo(
             name = "haha",
             mac = "haha",
+            ip = "",
+            port = 0,
         ),
         onSettingClick = TODO(),
         onDeviceControlClick = TODO(),

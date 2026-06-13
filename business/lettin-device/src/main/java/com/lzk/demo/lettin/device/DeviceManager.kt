@@ -3,6 +3,8 @@ package com.lzk.demo.lettin.device
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.core.log.logD
 import com.lzk.core.log.logE
+import com.lzk.core.log.logI
+import com.lzk.core.socket.TcpClient
 import com.lzk.core.socket.UdpClient
 import com.lzk.core.socket.bean.UdpInfo
 import com.lzk.demo.lettin.device.utils.HqDataHelper.parserToLettin
@@ -36,6 +38,10 @@ class DeviceManager {
         UdpClient.instance
     }
 
+    private val tcpClient: TcpClient by lazy {
+        TcpClient()
+    }
+
     private val _gatewayFlow =
         MutableSharedFlow<List<LettinGatewayInfo>>(
             replay = 1,
@@ -49,6 +55,11 @@ class DeviceManager {
             udpClient.udpDataFlow.collect {
                 logD(TAG, "udpState:$it")
                 onUdpData(it)
+            }
+        }
+        scope.launch {
+            tcpClient.state.collect {
+                logD(TAG, "tcpState:$it")
             }
         }
     }
@@ -91,6 +102,19 @@ class DeviceManager {
                 _gatewayFlow.emit(emptyList())
             }
         }
+    }
+
+    fun connectDevice(
+        ip: String,
+        port: Int,
+    ) {
+        tcpClient
+            .connect(ip, port)
+            .onSuccess {
+                logI(TAG, "connectDevice ip:$ip, port:$port")
+            }.onFailure {
+                logE(TAG, "connectDevice ip:$ip, port:$port failed:", it)
+            }
     }
 
     private fun onUdpData(udpInfo: UdpInfo) {

@@ -13,14 +13,17 @@ object HqDataHelper {
 
     fun UdpInfo.parserToLettin(): LettinGatewayInfo? =
         runCatching {
-            var mac: String? = null
-            val json = Utils.parasUdpJson(this.data)
+            val udpInfo = this
+            val json = Utils.parasUdpJson(udpInfo.data)
             logD(TAG, "json:$json")
-            val macBytes = ByteArray(8)
-            System.arraycopy(this.data, 2, macBytes, 0, 8)
-            mac = Utils.bytesToHexString(macBytes)
-            val hqBean = GsonUtils.fromJson(json, HqBean::class.java)
-            LettinGatewayInfo(name = hqBean?.getName(), mac = mac ?: hqBean?.mac)
+            GsonUtils.fromJson(json, HqBean::class.java)?.let {
+                LettinGatewayInfo(
+                    name = it.getName(),
+                    mac = it.getMac(udpInfo),
+                    ip = udpInfo.fromIp,
+                    port = udpInfo.fromPort,
+                )
+            }
         }.onFailure {
             logE(TAG, "parse udp data error: ${it.message}")
         }.getOrNull()
@@ -31,4 +34,12 @@ object HqDataHelper {
         } else {
             this.data?.name
         }
+
+    private fun HqBean.getMac(udpInfo: UdpInfo): String {
+        var mac: String? = null
+        val macBytes = ByteArray(8)
+        System.arraycopy(udpInfo.data, 2, macBytes, 0, 8)
+        mac = Utils.bytesToHexString(macBytes)
+        return mac ?: this.mac ?: ""
+    }
 }
