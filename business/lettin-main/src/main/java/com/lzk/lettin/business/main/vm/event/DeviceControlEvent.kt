@@ -5,4 +5,8 @@ sealed interface DeviceControlEvent {
         val ip: String,
         val port: Int,
     ) : DeviceControlEvent
+
+    data class Query(
+        val gwId: String,
+    ) : DeviceControlEvent
 }

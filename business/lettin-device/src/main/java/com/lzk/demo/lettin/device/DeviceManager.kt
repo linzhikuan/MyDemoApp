@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
@@ -30,6 +31,16 @@ class DeviceManager {
         }
         const val UDP_LOCAL_PORT = 6000
         const val UDP_REMOTE_PORT = 7000
+
+        const val LETTIN4_GW_T = 1 // 网关信息表
+        const val LETTIN4_DEV_T = 2 // 设备表
+        const val LETTIN4_ROOM_T = 3 // 房间表
+        const val LETTIN4_AREA_T = 4 // 区域表
+        const val LETTIN4_SNAPSHOT_T = 5 // 快照表
+        const val LETTIN4_SCENE_T = 6 // 场景表
+        const val LETTIN4_APPRES_T = 7 // 预留字段表
+
+        const val CMD_TABLE_QUERY = 4004 // 查询表操作
 
         const val BROADCAST_IP = "255.255.255.255"
     }
@@ -85,7 +96,11 @@ class DeviceManager {
                             )
 
                         is TcpState.OnClosed -> ConnectionState.Disconnected(tcpState.throwable?.message)
-                        is TcpState.OnReceiveMsg -> null
+                        is TcpState.OnReceiveMsg -> {
+                            logI(TAG, "onReceiveMsg")
+                            null
+                        }
+
                         is TcpState.OnReceiveMsgFailed ->
                             ConnectionState.Error(
                                 tcpState.throwable.message ?: "接收消息失败",
@@ -155,6 +170,40 @@ class DeviceManager {
                 }.onFailure {
                     logE(TAG, "connectDevice failed", it)
                 }
+        }
+    }
+
+    fun queryTable(gatewayId: String) {
+        scope.launch {
+            val tid = Random.nextInt(32767)
+            val cmd = CMD_TABLE_QUERY
+            runCatching {
+                JSONObject().apply {
+                    put("Tid", tid)
+                    put("Cmd", cmd)
+                    put("gwId", gatewayId)
+                    val jsonArray = JSONArray()
+                    val obj1 = JSONObject()
+                    obj1.put("tableId", LETTIN4_GW_T)
+                    obj1.put("ver", 0)
+                    jsonArray.put(obj1)
+                    put("data", jsonArray)
+                    put("Token", "lettintesttokena")
+                }
+            }.onSuccess { params ->
+                logD(TAG, "params:$params")
+                DataEncoder
+                    .hqDataEncode(params.toString().toByteArray(), cmd, tid)
+                    .forEach { data ->
+                        tcpClient
+                            .sendMessage(data)
+                            .onSuccess {
+                                logI(TAG, "send success")
+                            }.onFailure {
+                                logE(TAG, "send failed", it)
+                            }
+                    }
+            }
         }
     }
 

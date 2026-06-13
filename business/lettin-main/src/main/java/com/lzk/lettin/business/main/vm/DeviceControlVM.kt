@@ -62,6 +62,10 @@ class DeviceControlVM
                     logI(TAG, "connectionState changed: $connectionState")
                     _state.update { it.copy(connectionState = connectionState) }
                     when (connectionState) {
+                        is ConnectionState.Connecting -> {
+                            sendSideEffect(DeviceControlSideEffect.ShowToast("正在连接..."))
+                        }
+
                         is ConnectionState.Connected -> {
                             sendSideEffect(DeviceControlSideEffect.ShowToast("连接成功"))
                         }
@@ -86,6 +90,8 @@ class DeviceControlVM
                 is DeviceControlEvent.Connect -> {
                     connect(event.ip, event.port)
                 }
+
+                is DeviceControlEvent.Query -> query(event.gwId)
             }
         }
 
@@ -93,9 +99,10 @@ class DeviceControlVM
             ip: String,
             port: Int,
         ) {
-            viewModelScope.launch {
-                sendSideEffect(DeviceControlSideEffect.ShowToast("正在连接..."))
-            }
             getDeviceService().connect(ip, port)
+        }
+
+        private fun query(gwId: String) {
+            getDeviceService().query(gwId)
         }
     }

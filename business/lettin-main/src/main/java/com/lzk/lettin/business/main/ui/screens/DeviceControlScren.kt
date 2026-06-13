@@ -48,7 +48,19 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                     )
                 }
             }) {
-                Text(text = if (state.connectionState is ConnectionState.Connecting) "连接中..." else "连接")
+                Text(text = if (state.connectionState is ConnectionState.Connected) "已连接" else "连接")
+            }
+
+            Button(onClick = {
+                state.gatewayInfo?.let { info ->
+                    vm.onEvent(
+                        DeviceControlEvent.Query(
+                            gwId = info.mac,
+                        ),
+                    )
+                }
+            }) {
+                Text(text = "查询")
             }
         }
         HorizontalDivider(color = Color.Gray)
