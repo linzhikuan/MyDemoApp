@@ -21,7 +21,7 @@ object HqDataHelper {
                     name = it.getName(),
                     mac = it.getMac(udpInfo),
                     ip = udpInfo.fromIp,
-                    port = udpInfo.fromPort,
+                    port = udpInfo.tcpPort,
                 )
             }
         }.onFailure {

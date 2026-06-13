@@ -28,6 +28,7 @@ class DeviceManager {
         }
         const val UDP_LOCAL_PORT = 6000
         const val UDP_REMOTE_PORT = 7000
+
         const val BROADCAST_IP = "255.255.255.255"
     }
 
@@ -112,9 +113,9 @@ class DeviceManager {
             tcpClient
                 .connect(ip, port)
                 .onSuccess {
-                    logI(TAG, "connectDevice ip:$ip, port:$port")
+                    logI(TAG, "connectDevice success ip:$ip, port:$port")
                 }.onFailure {
-                    logE(TAG, "connectDevice ip:$ip, port:$port failed:", it)
+                    logE(TAG, "connectDevice failed", it)
                 }
         }
     }
