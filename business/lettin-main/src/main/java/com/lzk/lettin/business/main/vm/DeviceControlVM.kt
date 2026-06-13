@@ -55,7 +55,7 @@ class DeviceControlVM
             _sideEffect.send(effect)
         }
 
-        private suspend fun handleEvent(event: DeviceControlEvent) {
+        private fun handleEvent(event: DeviceControlEvent) {
             logI(TAG, "handleEvent:$event")
             when (event) {
                 is DeviceControlEvent.Connect -> {
