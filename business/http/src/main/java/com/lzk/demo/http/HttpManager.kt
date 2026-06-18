@@ -16,6 +16,8 @@ object HttpManager {
     private var loggingInterceptor =
         HttpLoggingInterceptor { message ->
             logD(TAG, "MyHttpLogger--$message")
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
         }
 
     private val httpClient: OkHttpClient by lazy {
