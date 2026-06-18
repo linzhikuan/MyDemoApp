@@ -91,7 +91,7 @@ class DeviceControlVM
                     connect(event.ip, event.port)
                 }
 
-                is DeviceControlEvent.Query -> query(event.gwId)
+                is DeviceControlEvent.Query -> query(event.gwId, event.ip)
             }
         }
 
@@ -102,7 +102,10 @@ class DeviceControlVM
             getDeviceService().connect(ip, port)
         }
 
-        private fun query(gwId: String) {
-            getDeviceService().query(gwId)
+        private fun query(
+            gwId: String,
+            ip: String,
+        ) {
+            getDeviceService().query(gwId, ip)
         }
     }

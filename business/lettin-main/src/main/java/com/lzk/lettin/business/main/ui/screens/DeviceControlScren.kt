@@ -56,6 +56,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                     vm.onEvent(
                         DeviceControlEvent.Query(
                             gwId = info.mac,
+                            ip = info.ip,
                         ),
                     )
                 }

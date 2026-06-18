@@ -11,6 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/business" />
+            <option value="$PROJECT_DIR$/business/http" />
             <option value="$PROJECT_DIR$/business/lettin-device" />
             <option value="$PROJECT_DIR$/business/lettin-main" />
             <option value="$PROJECT_DIR$/business/lettin-user" />

@@ -27,7 +27,10 @@ class LettinDeviceServiceImpl : DeviceService {
         DeviceManager.instance.connectDevice(ip, port)
     }
 
-    override fun query(gwId: String) {
-        DeviceManager.instance.queryTable(gwId)
+    override fun query(
+        gwId: String,
+        ip: String,
+    ) {
+        DeviceManager.instance.queryTable(gwId, ip)
     }
 }

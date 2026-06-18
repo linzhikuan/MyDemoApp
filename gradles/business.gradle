@@ -44,4 +44,5 @@ dependencies {
 
     implementation(project(":core:log"))
     implementation(project(":core:utils"))
+    implementation(project(":core:network"))
 }

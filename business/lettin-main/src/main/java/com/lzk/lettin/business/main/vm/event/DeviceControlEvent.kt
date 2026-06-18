@@ -8,5 +8,6 @@ sealed interface DeviceControlEvent {
 
     data class Query(
         val gwId: String,
+        val ip: String,
     ) : DeviceControlEvent
 }

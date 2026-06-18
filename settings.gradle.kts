@@ -55,6 +55,7 @@ include(":modules:lettin")
 include(":business:lettin-main")
 include(":business:lettin-device")
 include(":business:lettin-user")
+include(":business:http")
 
 include(":common:service")
 include(":common:bean")

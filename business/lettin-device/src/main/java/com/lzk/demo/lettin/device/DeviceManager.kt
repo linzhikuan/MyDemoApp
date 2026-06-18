@@ -2,6 +2,7 @@ package com.lzk.demo.lettin.device
 
 import com.lzk.common.bean.device.ConnectionState
 import com.lzk.common.bean.device.LettinGatewayInfo
+import com.lzk.common.servicce.http.getHttpService
 import com.lzk.core.log.logD
 import com.lzk.core.log.logE
 import com.lzk.core.log.logI
@@ -9,6 +10,7 @@ import com.lzk.core.socket.TcpClient
 import com.lzk.core.socket.UdpClient
 import com.lzk.core.socket.bean.TcpState
 import com.lzk.core.socket.bean.UdpInfo
+import com.lzk.demo.lettin.device.inner.LettinAPI
 import com.lzk.demo.lettin.device.utils.HqDataHelper.parserToLettin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +20,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -173,7 +178,10 @@ class DeviceManager {
         }
     }
 
-    fun queryTable(gatewayId: String) {
+    fun queryTable(
+        gatewayId: String,
+        ip: String,
+    ) {
         scope.launch {
             val tid = Random.nextInt(32767)
             val cmd = CMD_TABLE_QUERY
@@ -192,17 +200,28 @@ class DeviceManager {
                 }
             }.onSuccess { params ->
                 logD(TAG, "params:$params")
-                DataEncoder
-                    .hqDataEncode(params.toString().toByteArray(), cmd, tid)
-                    .forEach { data ->
-                        tcpClient
-                            .sendMessage(data)
-                            .onSuccess {
-                                logI(TAG, "send success")
-                            }.onFailure {
-                                logE(TAG, "send failed", it)
-                            }
-                    }
+                runCatching {
+                    getHttpService().getService(LettinAPI::class.java, ip).request(
+                        RequestBody.create(
+                            "application/json; charset=utf-8".toMediaTypeOrNull(),
+                            params.toString(),
+                        ),
+                    )
+                }.onFailure {
+                    logE(TAG, "query error", it)
+                }
+
+//                DataEncoder
+//                    .hqDataEncode(params.toString().toByteArray(), cmd, tid)
+//                    .forEach { data ->
+//                        tcpClient
+//                            .sendMessage(data)
+//                            .onSuccess {
+//                                logI(TAG, "send success")
+//                            }.onFailure {
+//                                logE(TAG, "send failed", it)
+//                            }
+//                    }
             }
         }
     }

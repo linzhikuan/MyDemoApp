@@ -20,7 +20,10 @@ interface DeviceService : IProvider {
         port: Int,
     )
 
-    fun query(gwId: String)
+    fun query(
+        gwId: String,
+        ip: String,
+    )
 }
 
 fun getDeviceService(): DeviceService = ARouter.getInstance().navigation(DeviceService::class.java)
