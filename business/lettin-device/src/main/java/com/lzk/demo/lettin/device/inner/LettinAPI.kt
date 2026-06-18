@@ -8,7 +8,7 @@ import retrofit2.http.POST
 interface LettinAPI {
     @Headers("Content-Type: application/json; charset=utf-8")
     @POST("api")
-    fun request(
+    suspend fun request(
         @Body body: RequestBody,
-    ): String?
+    ): Any
 }

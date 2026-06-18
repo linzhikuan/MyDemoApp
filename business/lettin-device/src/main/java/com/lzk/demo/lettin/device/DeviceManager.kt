@@ -207,6 +207,8 @@ class DeviceManager {
                             params.toString(),
                         ),
                     )
+                }.onSuccess {
+                    logD(TAG, "query success:$it")
                 }.onFailure {
                     logE(TAG, "query error", it)
                 }

@@ -19,8 +19,11 @@ object HttpManager {
         }
 
     private val httpClient: OkHttpClient by lazy {
+        val (sslFactory, trustManager) = SSLHelper.getSSLFactoryAndTrustManager()
         OkHttpClient
             .Builder()
+            .sslSocketFactory(sslFactory, trustManager)
+            .hostnameVerifier { _, _ -> true }
             .addInterceptor(loggingInterceptor)
             .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
