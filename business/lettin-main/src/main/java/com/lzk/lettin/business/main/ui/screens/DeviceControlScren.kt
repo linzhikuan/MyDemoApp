@@ -30,7 +30,12 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
         vm.sideEffect.collect {
             when (it) {
                 is DeviceControlSideEffect.ShowToast ->
-                    Toast.makeText(context, it.msg, Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            it.msg,
+                            Toast.LENGTH_LONG,
+                        ).show()
             }
         }
     }
@@ -54,7 +59,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
             Button(onClick = {
                 state.gatewayInfo?.let { info ->
                     vm.onEvent(
-                        DeviceControlEvent.Query(
+                        DeviceControlEvent.SyncGwTable(
                             gwId = info.mac,
                             ip = info.ip,
                         ),

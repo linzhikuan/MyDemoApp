@@ -6,7 +6,7 @@ sealed interface DeviceControlEvent {
         val port: Int,
     ) : DeviceControlEvent
 
-    data class Query(
+    data class SyncGwTable(
         val gwId: String,
         val ip: String,
     ) : DeviceControlEvent

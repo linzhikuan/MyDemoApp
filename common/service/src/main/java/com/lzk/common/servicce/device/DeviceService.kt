@@ -20,8 +20,8 @@ interface DeviceService : IProvider {
         port: Int,
     )
 
-    fun query(
-        gwId: String,
+    fun syncGwTable(
+        gwMac: String,
         ip: String,
     )
 }

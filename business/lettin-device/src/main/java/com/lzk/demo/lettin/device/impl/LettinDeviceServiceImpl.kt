@@ -27,10 +27,10 @@ class LettinDeviceServiceImpl : DeviceService {
         DeviceManager.instance.connectDevice(ip, port)
     }
 
-    override fun query(
-        gwId: String,
+    override fun syncGwTable(
+        gwMac: String,
         ip: String,
     ) {
-        DeviceManager.instance.queryTable(gwId, ip)
+        DeviceManager.instance.syncGwTable(gwMac, ip)
     }
 }

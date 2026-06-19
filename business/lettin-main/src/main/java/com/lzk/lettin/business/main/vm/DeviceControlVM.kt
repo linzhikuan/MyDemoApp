@@ -91,7 +91,7 @@ class DeviceControlVM
                     connect(event.ip, event.port)
                 }
 
-                is DeviceControlEvent.Query -> query(event.gwId, event.ip)
+                is DeviceControlEvent.SyncGwTable -> syncGwTable(event.gwId, event.ip)
             }
         }
 
@@ -102,10 +102,10 @@ class DeviceControlVM
             getDeviceService().connect(ip, port)
         }
 
-        private fun query(
+        private fun syncGwTable(
             gwId: String,
             ip: String,
         ) {
-            getDeviceService().query(gwId, ip)
+            getDeviceService().syncGwTable(gwId, ip)
         }
     }
