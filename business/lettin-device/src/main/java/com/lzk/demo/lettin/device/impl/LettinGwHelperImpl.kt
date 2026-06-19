@@ -11,7 +11,6 @@ import com.lzk.demo.lettin.device.bean.DeviceTableBean
 import com.lzk.demo.lettin.device.bean.RoomTableBean
 import com.lzk.demo.lettin.device.bean.SceneTableBean
 import com.lzk.demo.lettin.device.bean.SnapShotTableBean
-import com.lzk.demo.lettin.device.data.DeviceDataStore
 import com.lzk.demo.lettin.device.inner.LettinAPI
 import com.lzk.demo.lettin.device.inner.LettinGwHelper
 import com.lzk.demo.lettin.device.utils.GwParamUtils
@@ -35,13 +34,10 @@ class LettinGwHelperImpl : LettinGwHelper {
                 val tableArrayJson = GsonUtils.toJson(tableBean.tableArray)
                 when (tableBean.tableId) {
                     Constants.LETTIN4_DEV_T -> {
-                        GsonUtils
-                            .fromJsonToList<DeviceTableBean>(
-                                tableArrayJson,
-                                DeviceTableBean::class.java,
-                            ).also {
-                                DeviceDataStore.updateTable(it)
-                            }
+                        GsonUtils.fromJsonToList<DeviceTableBean>(
+                            tableArrayJson,
+                            DeviceTableBean::class.java,
+                        )
                     }
 
                     Constants.LETTIN4_ROOM_T -> {

@@ -19,11 +19,13 @@ object DeviceDataStore {
     private var snapShotDao: SnapShotDao? = null
 
     fun init(context: Context) {
-        database = androidx.room.Room.databaseBuilder(
-            context.applicationContext,
-            DeviceDatabase::class.java,
-            "device_db"
-        ).build()
+        database =
+            androidx.room.Room
+                .databaseBuilder(
+                    context.applicationContext,
+                    DeviceDatabase::class.java,
+                    "device_db",
+                ).build()
         deviceDao = database!!.deviceDao()
         areaDao = database!!.areaDao()
         gwDao = database!!.gwDao()
@@ -40,9 +42,7 @@ object DeviceDataStore {
         }
     }
 
-    fun getDeviceTables(): List<DeviceTableBean> {
-        return deviceDao?.getAll() ?: emptyList()
-    }
+    fun getDeviceTables(): List<DeviceTableBean> = deviceDao?.getAll() ?: emptyList()
 
     // Area
     fun updateAreaTable(areas: List<AreaTableBean>?) {
@@ -52,9 +52,7 @@ object DeviceDataStore {
         }
     }
 
-    fun getAreaTables(): List<AreaTableBean> {
-        return areaDao?.getAll() ?: emptyList()
-    }
+    fun getAreaTables(): List<AreaTableBean> = areaDao?.getAll() ?: emptyList()
 
     // Gateway
     fun updateGwTable(gateways: List<GwTableBean>?) {
@@ -64,9 +62,7 @@ object DeviceDataStore {
         }
     }
 
-    fun getGwTables(): List<GwTableBean> {
-        return gwDao?.getAll() ?: emptyList()
-    }
+    fun getGwTables(): List<GwTableBean> = gwDao?.getAll() ?: emptyList()
 
     // Room
     fun updateRoomTable(rooms: List<RoomTableBean>?) {
@@ -76,9 +72,7 @@ object DeviceDataStore {
         }
     }
 
-    fun getRoomTables(): List<RoomTableBean> {
-        return roomDao?.getAll() ?: emptyList()
-    }
+    fun getRoomTables(): List<RoomTableBean> = roomDao?.getAll() ?: emptyList()
 
     // Scene
     fun updateSceneTable(scenes: List<SceneTableBean>?) {
@@ -88,9 +82,7 @@ object DeviceDataStore {
         }
     }
 
-    fun getSceneTables(): List<SceneTableBean> {
-        return sceneDao?.getAll() ?: emptyList()
-    }
+    fun getSceneTables(): List<SceneTableBean> = sceneDao?.getAll() ?: emptyList()
 
     // Snapshot
     fun updateSnapShotTable(snapshots: List<SnapShotTableBean>?) {
@@ -100,7 +92,5 @@ object DeviceDataStore {
         }
     }
 
-    fun getSnapShotTables(): List<SnapShotTableBean> {
-        return snapShotDao?.getAll() ?: emptyList()
-    }
+    fun getSnapShotTables(): List<SnapShotTableBean> = snapShotDao?.getAll() ?: emptyList()
 }
