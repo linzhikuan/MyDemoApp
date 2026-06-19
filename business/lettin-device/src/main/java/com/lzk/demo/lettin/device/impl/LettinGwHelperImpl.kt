@@ -11,6 +11,7 @@ import com.lzk.demo.lettin.device.bean.DeviceTableBean
 import com.lzk.demo.lettin.device.bean.RoomTableBean
 import com.lzk.demo.lettin.device.bean.SceneTableBean
 import com.lzk.demo.lettin.device.bean.SnapShotTableBean
+import com.lzk.demo.lettin.device.data.RoomDataManager
 import com.lzk.demo.lettin.device.inner.LettinAPI
 import com.lzk.demo.lettin.device.inner.LettinGwHelper
 import com.lzk.demo.lettin.device.utils.GwParamUtils
@@ -34,38 +35,53 @@ class LettinGwHelperImpl : LettinGwHelper {
                 val tableArrayJson = GsonUtils.toJson(tableBean.tableArray)
                 when (tableBean.tableId) {
                     Constants.LETTIN4_DEV_T -> {
-                        GsonUtils.fromJsonToList<DeviceTableBean>(
-                            tableArrayJson,
-                            DeviceTableBean::class.java,
-                        )
+                        GsonUtils
+                            .fromJsonToList<DeviceTableBean>(
+                                tableArrayJson,
+                                DeviceTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateDeviceTable(it)
+                            }
                     }
 
                     Constants.LETTIN4_ROOM_T -> {
-                        GsonUtils.fromJson<RoomTableBean>(
-                            tableArrayJson,
-                            RoomTableBean::class.java,
-                        )
+                        GsonUtils
+                            .fromJsonToList<RoomTableBean>(
+                                tableArrayJson,
+                                RoomTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateRoomTable(it)
+                            }
                     }
 
                     Constants.LETTIN4_AREA_T -> {
-                        GsonUtils.fromJson<AreaTableBean>(
-                            tableArrayJson,
-                            AreaTableBean::class.java,
-                        )
+                        GsonUtils
+                            .fromJsonToList<AreaTableBean>(
+                                tableArrayJson,
+                                AreaTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateAreaTable(it)
+                            }
                     }
 
                     Constants.LETTIN4_SNAPSHOT_T -> {
-                        GsonUtils.fromJson<SnapShotTableBean>(
-                            tableArrayJson,
-                            SnapShotTableBean::class.java,
-                        )
+                        GsonUtils
+                            .fromJsonToList<SnapShotTableBean>(
+                                tableArrayJson,
+                                SnapShotTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateSnapShotTable(it)
+                            }
                     }
 
                     Constants.LETTIN4_SCENE_T -> {
-                        GsonUtils.fromJson<SceneTableBean>(
-                            tableArrayJson,
-                            SceneTableBean::class.java,
-                        )
+                        GsonUtils
+                            .fromJsonToList<SceneTableBean>(
+                                tableArrayJson,
+                                SceneTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateSceneTable(it)
+                            }
                     }
                 }
             }

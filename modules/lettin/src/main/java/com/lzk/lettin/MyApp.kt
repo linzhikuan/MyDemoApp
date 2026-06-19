@@ -7,6 +7,7 @@ import com.lzk.core.log.logI
 import com.lzk.core.mmkv.MMKVManager
 import com.lzk.core.utils.AppUtil
 import com.lzk.core.utils.launch
+import com.lzk.demo.lettin.device.data.RoomDataManager
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -28,6 +29,8 @@ class MyApp : Application() {
         ARouter.init(this)
 
         MMKVManager.initialize(this)
+        // 初始化 Room 数据库
+        RoomDataManager.init(this)
 
         launch {
             AppUtil.crashState.collect {

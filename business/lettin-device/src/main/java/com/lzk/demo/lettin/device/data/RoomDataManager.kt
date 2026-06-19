@@ -1,6 +1,7 @@
 package com.lzk.demo.lettin.device.data
 
 import android.content.Context
+import androidx.room.Room
 import com.lzk.demo.lettin.device.bean.AreaTableBean
 import com.lzk.demo.lettin.device.bean.DeviceTableBean
 import com.lzk.demo.lettin.device.bean.GwTableBean
@@ -8,9 +9,7 @@ import com.lzk.demo.lettin.device.bean.RoomTableBean
 import com.lzk.demo.lettin.device.bean.SceneTableBean
 import com.lzk.demo.lettin.device.bean.SnapShotTableBean
 
-object DeviceDataStore {
-    private var database: DeviceDatabase? = null
-
+object RoomDataManager {
     private var deviceDao: DeviceDao? = null
     private var areaDao: AreaDao? = null
     private var gwDao: GwDao? = null
@@ -19,19 +18,20 @@ object DeviceDataStore {
     private var snapShotDao: SnapShotDao? = null
 
     fun init(context: Context) {
-        database =
-            androidx.room.Room
-                .databaseBuilder(
-                    context.applicationContext,
-                    DeviceDatabase::class.java,
-                    "device_db",
-                ).build()
-        deviceDao = database!!.deviceDao()
-        areaDao = database!!.areaDao()
-        gwDao = database!!.gwDao()
-        roomDao = database!!.roomDao()
-        sceneDao = database!!.sceneDao()
-        snapShotDao = database!!.snapShotDao()
+        Room
+            .databaseBuilder(
+                context.applicationContext,
+                DeviceDatabase::class.java,
+                "device_db",
+            ).build()
+            .also { database ->
+                deviceDao = database.deviceDao()
+                areaDao = database.areaDao()
+                gwDao = database.gwDao()
+                roomDao = database.roomDao()
+                sceneDao = database.sceneDao()
+                snapShotDao = database.snapShotDao()
+            }
     }
 
     // Device
