@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import org.json.JSONArray
@@ -34,20 +33,7 @@ class DeviceManager {
         val instance: DeviceManager by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             DeviceManager()
         }
-        const val UDP_LOCAL_PORT = 6000
-        const val UDP_REMOTE_PORT = 7000
 
-        const val LETTIN4_GW_T = 1 // 网关信息表
-        const val LETTIN4_DEV_T = 2 // 设备表
-        const val LETTIN4_ROOM_T = 3 // 房间表
-        const val LETTIN4_AREA_T = 4 // 区域表
-        const val LETTIN4_SNAPSHOT_T = 5 // 快照表
-        const val LETTIN4_SCENE_T = 6 // 场景表
-        const val LETTIN4_APPRES_T = 7 // 预留字段表
-
-        const val CMD_TABLE_QUERY = 4004 // 查询表操作
-
-        const val BROADCAST_IP = "255.255.255.255"
     }
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -141,9 +127,9 @@ class DeviceManager {
                         runCatching {
                             udpClient.sendMessage(
                                 data,
-                                BROADCAST_IP,
-                                UDP_REMOTE_PORT,
-                                UDP_LOCAL_PORT,
+                                Constants.BROADCAST_IP,
+                                Constants.UDP_REMOTE_PORT,
+                                Constants.UDP_LOCAL_PORT,
                             )
                         }.onFailure {
                             logE(TAG, "send udp error: ${it.message}")
@@ -184,7 +170,7 @@ class DeviceManager {
     ) {
         scope.launch {
             val tid = Random.nextInt(32767)
-            val cmd = CMD_TABLE_QUERY
+            val cmd = Constants.CMD_TABLE_QUERY
             runCatching {
                 JSONObject().apply {
                     put("Tid", tid)
@@ -192,7 +178,7 @@ class DeviceManager {
                     put("gwId", gatewayId)
                     val jsonArray = JSONArray()
                     val obj1 = JSONObject()
-                    obj1.put("tableId", LETTIN4_GW_T)
+                    obj1.put("tableId", Constants.LETTIN4_GW_T)
                     obj1.put("ver", 0)
                     jsonArray.put(obj1)
                     put("data", jsonArray)
