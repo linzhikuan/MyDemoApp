@@ -4,6 +4,7 @@ import android.app.Application
 import com.alibaba.android.arouter.launcher.ARouter
 import com.lzk.core.log.XLogConfig
 import com.lzk.core.log.logI
+import com.lzk.core.mmkv.MMKVManager
 import com.lzk.core.utils.AppUtil
 import com.lzk.core.utils.launch
 import dagger.hilt.android.HiltAndroidApp
@@ -25,6 +26,8 @@ class MyApp : Application() {
             ARouter.openDebug() // 开启调试模式
         }
         ARouter.init(this)
+
+        MMKVManager.initialize(this)
 
         launch {
             AppUtil.crashState.collect {

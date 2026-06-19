@@ -33,4 +33,5 @@ dependencies {
 
     api project(":core:log")
     api project(":core:utils")
+    api project(":core:mmkv")
 }
