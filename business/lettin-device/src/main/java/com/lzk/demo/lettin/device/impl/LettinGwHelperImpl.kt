@@ -8,6 +8,7 @@ import com.lzk.core.utils.GsonUtils
 import com.lzk.demo.lettin.device.Constants
 import com.lzk.demo.lettin.device.bean.AreaTableBean
 import com.lzk.demo.lettin.device.bean.DeviceTableBean
+import com.lzk.demo.lettin.device.bean.GwTableBean
 import com.lzk.demo.lettin.device.bean.RoomTableBean
 import com.lzk.demo.lettin.device.bean.SceneTableBean
 import com.lzk.demo.lettin.device.bean.SnapShotTableBean
@@ -34,6 +35,16 @@ class LettinGwHelperImpl : LettinGwHelper {
                 logD(TAG, "tableId:${tableBean.tableId},${tableBean.tableArray}")
                 val tableArrayJson = GsonUtils.toJson(tableBean.tableArray)
                 when (tableBean.tableId) {
+                    Constants.LETTIN4_GW_T -> {
+                        GsonUtils
+                            .fromJsonToList<GwTableBean>(
+                                tableArrayJson,
+                                GwTableBean::class.java,
+                            ).also {
+                                RoomDataManager.updateGwTable(it)
+                            }
+                    }
+
                     Constants.LETTIN4_DEV_T -> {
                         GsonUtils
                             .fromJsonToList<DeviceTableBean>(

@@ -4,9 +4,11 @@ import androidx.room.TypeConverter
 import com.lzk.core.utils.GsonUtils
 import com.lzk.demo.lettin.device.bean.ActionItem
 import com.lzk.demo.lettin.device.bean.AppInfo
+import com.lzk.demo.lettin.device.bean.BasicInfo
 import com.lzk.demo.lettin.device.bean.NodeItem
 import com.lzk.demo.lettin.device.bean.OnOff
 import com.lzk.demo.lettin.device.bean.PortFeature
+import com.lzk.demo.lettin.device.bean.PowerSource
 import com.lzk.demo.lettin.device.bean.SceneDes
 
 class Converters {
@@ -83,4 +85,40 @@ class Converters {
 
     @TypeConverter
     fun toAppInfo(value: String?): AppInfo? = value?.let { runCatching { GsonUtils.fromJson(it, AppInfo::class.java) }.getOrNull() }
+
+    @TypeConverter
+    fun fromAnyList(value: List<Any>?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toAnyList(value: String?): List<Any>? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJsonToList(
+                    it,
+                    Any::class.java,
+                )
+            }.getOrNull()
+        }
+
+    @TypeConverter
+    fun fromBasicInfo(value: BasicInfo?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toBasicInfo(value: String?): BasicInfo? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJson(it, BasicInfo::class.java)
+            }.getOrNull()
+        }
+
+    @TypeConverter
+    fun fromPowerSource(value: PowerSource?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toPowerSource(value: String?): PowerSource? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJson(it, PowerSource::class.java)
+            }.getOrNull()
+        }
 }

@@ -13,4 +13,5 @@ android {
 dependencies {
     implementation(project(":core:socket"))
     implementation(project(":core:database"))
+    add("kapt", libs.room.compiler)
 }
