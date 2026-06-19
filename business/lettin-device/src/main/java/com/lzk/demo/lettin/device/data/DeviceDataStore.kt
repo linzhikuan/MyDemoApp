@@ -1,20 +1,31 @@
 package com.lzk.demo.lettin.device.data
 
-import com.lzk.core.mmkv.MMKVManager
-import com.lzk.core.utils.GsonUtils
+import android.content.Context
+import androidx.room.Room
 import com.lzk.demo.lettin.device.PublicKeys
 import com.lzk.demo.lettin.device.bean.DeviceTableBean
 
 object DeviceDataStore {
-    private val mmkv = MMKVManager.mmkvWithID(PublicKeys.KEY_MMKV_DEVICE_TABLE)
+    private var database: DeviceDatabase? = null
+    private var deviceDao: DeviceDao? = null
 
-    fun updateTable(deviceTables: List<DeviceTableBean>?) {
-        mmkv.putString(DeviceTableBean::class.simpleName, GsonUtils.toJson(deviceTables))
+    fun init(context: Context) {
+        database =
+            Room
+                .databaseBuilder(
+                    context.applicationContext,
+                    DeviceDatabase::class.java,
+                    PublicKeys.KEY_ROOM_DEVICE_TABLE,
+                ).build()
+        deviceDao = database!!.deviceDao()
     }
 
-    fun getDeviceTables(): List<DeviceTableBean>? =
-        runCatching {
-            val value = mmkv.getString(DeviceTableBean::class.simpleName, "")
-            GsonUtils.fromJsonToList(value, DeviceTableBean::class.java)
-        }.getOrNull()
+    fun updateTable(deviceTables: List<DeviceTableBean>?) {
+        deviceTables?.let {
+            deviceDao?.deleteAll()
+            deviceDao?.insertAll(it)
+        }
+    }
+
+    fun getDeviceTables(): List<DeviceTableBean> = deviceDao?.getAll() ?: emptyList()
 }

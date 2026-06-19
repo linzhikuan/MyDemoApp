@@ -1,5 +1,5 @@
 package com.lzk.demo.lettin.device.bean
 
 data class AreaTableBean(
-    val name: String,
+    val areaId: Int,
 )
