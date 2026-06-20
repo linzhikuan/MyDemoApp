@@ -1,8 +1,9 @@
 package com.lzk.lettin.business.main.ui.screens
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -87,7 +90,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
             }
 
             state.roomWithAreas.forEach { roomWithAreas ->
-                stickyHeader(key = "room_${roomWithAreas.room.roomId}") {
+                stickyHeader(key = "header_${roomWithAreas.room.roomId}") {
                     RoomHeader(roomWithAreas = roomWithAreas)
                 }
 
@@ -95,10 +98,17 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                     items = roomWithAreas.areas,
                     key = { "area_${roomWithAreas.room.roomId}_${it.area.areaId}" },
                 ) { areaWithDevices ->
+                    val isFirst = areaWithDevices == roomWithAreas.areas.first()
+                    val isLast = areaWithDevices == roomWithAreas.areas.last()
                     AreaItem(
                         areaWithDevices = areaWithDevices,
-                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                        isFirst = isFirst,
+                        isLast = isLast,
                     )
+                }
+
+                item(key = "footer_${roomWithAreas.room.roomId}") {
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
 
@@ -117,11 +127,11 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
 @Composable
 private fun RoomHeader(roomWithAreas: RoomWithAreas) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-        ) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 text = roomWithAreas.room.uname.ifEmpty { "房间 ${roomWithAreas.room.roomId}" },
             )
@@ -136,13 +146,17 @@ private fun RoomHeader(roomWithAreas: RoomWithAreas) {
 @Composable
 private fun AreaItem(
     areaWithDevices: AreaWithDevices,
-    modifier: Modifier = Modifier,
+    isFirst: Boolean = false,
+    isLast: Boolean = false,
 ) {
+    val cardColor = CardDefaults.cardColors().containerColor
+    val shape = if (isLast) RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp) else RoundedCornerShape(0.dp)
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray.copy(alpha = 0.2f))
-            .padding(8.dp),
+            .background(cardColor, shape)
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(top = if (isFirst) 8.dp else 0.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(text = areaWithDevices.area.uname.ifEmpty { "区域 ${areaWithDevices.area.areaId}" })
