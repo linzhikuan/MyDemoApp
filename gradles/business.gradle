@@ -38,6 +38,7 @@ dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
     implementation libs.material
+    implementation libs.arouter.api
 
     implementation(project(":common:service"))
     kapt("com.alibaba:arouter-compiler:1.5.2")

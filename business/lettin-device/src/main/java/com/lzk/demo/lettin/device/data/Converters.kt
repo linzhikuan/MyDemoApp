@@ -5,7 +5,10 @@ import com.lzk.core.utils.GsonUtils
 import com.lzk.demo.lettin.device.bean.ActionItem
 import com.lzk.demo.lettin.device.bean.AppInfo
 import com.lzk.demo.lettin.device.bean.BasicInfo
+import com.lzk.demo.lettin.device.bean.DeviceBasicInfo
+import com.lzk.demo.lettin.device.bean.DevicePowerSource
 import com.lzk.demo.lettin.device.bean.NodeItem
+import com.lzk.demo.lettin.device.bean.NwkAddrInfo
 import com.lzk.demo.lettin.device.bean.OnOff
 import com.lzk.demo.lettin.device.bean.PortFeature
 import com.lzk.demo.lettin.device.bean.PowerSource
@@ -119,6 +122,39 @@ class Converters {
         value?.let {
             runCatching {
                 GsonUtils.fromJson(it, PowerSource::class.java)
+            }.getOrNull()
+        }
+
+    @TypeConverter
+    fun fromDeviceBasicInfo(value: DeviceBasicInfo?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toDeviceBasicInfo(value: String?): DeviceBasicInfo? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJson(it, DeviceBasicInfo::class.java)
+            }.getOrNull()
+        }
+
+    @TypeConverter
+    fun fromDevicePowerSource(value: DevicePowerSource?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toDevicePowerSource(value: String?): DevicePowerSource? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJson(it, DevicePowerSource::class.java)
+            }.getOrNull()
+        }
+
+    @TypeConverter
+    fun fromNwkAddrInfo(value: NwkAddrInfo?): String? = value?.let { GsonUtils.toJson(it) }
+
+    @TypeConverter
+    fun toNwkAddrInfo(value: String?): NwkAddrInfo? =
+        value?.let {
+            runCatching {
+                GsonUtils.fromJson(it, NwkAddrInfo::class.java)
             }.getOrNull()
         }
 }
