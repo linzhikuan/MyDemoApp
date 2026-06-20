@@ -2,6 +2,7 @@ package com.lzk.lettin.business.main.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,7 +37,7 @@ import com.lzk.lettin.business.main.vm.state.RoomWithAreas
 import kotlinx.coroutines.launch
 
 @Suppress("ktlint:standard:function-naming")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
     val state by vm.state.collectAsState()
@@ -85,11 +86,20 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                 )
             }
 
-            items(
-                items = state.roomWithAreas,
-                key = { it.room.roomId },
-            ) { roomWithAreas ->
-                RoomCard(roomWithAreas = roomWithAreas)
+            state.roomWithAreas.forEach { roomWithAreas ->
+                stickyHeader(key = "room_${roomWithAreas.room.roomId}") {
+                    RoomHeader(roomWithAreas = roomWithAreas)
+                }
+
+                items(
+                    items = roomWithAreas.areas,
+                    key = { "area_${roomWithAreas.room.roomId}_${it.area.areaId}" },
+                ) { areaWithDevices ->
+                    AreaItem(
+                        areaWithDevices = areaWithDevices,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                    )
+                }
             }
 
             if (state.roomWithAreas.isEmpty()) {
@@ -105,7 +115,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
 }
 
 @Composable
-private fun RoomCard(roomWithAreas: RoomWithAreas) {
+private fun RoomHeader(roomWithAreas: RoomWithAreas) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
     ) {
@@ -115,26 +125,21 @@ private fun RoomCard(roomWithAreas: RoomWithAreas) {
             Text(
                 text = roomWithAreas.room.uname.ifEmpty { "房间 ${roomWithAreas.room.roomId}" },
             )
-
             Text(
                 text = "区域: ${roomWithAreas.areas.size} | 设备: ${roomWithAreas.deviceCount}",
-                modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
+                modifier = Modifier.padding(top = 4.dp),
             )
-
-            roomWithAreas.areas.forEachIndexed { index, areaWithDevices ->
-                if (index > 0) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
-                AreaItem(areaWithDevices = areaWithDevices)
-            }
         }
     }
 }
 
 @Composable
-private fun AreaItem(areaWithDevices: AreaWithDevices) {
+private fun AreaItem(
+    areaWithDevices: AreaWithDevices,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.LightGray.copy(alpha = 0.2f))
             .padding(8.dp),
