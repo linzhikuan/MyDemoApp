@@ -8,10 +8,14 @@ import com.lzk.common.bean.device.ConnectionState
 import com.lzk.common.bean.device.LettinGatewayInfo
 import com.lzk.common.servicce.device.getDeviceService
 import com.lzk.core.log.logI
+import com.lzk.demo.lettin.device.data.RoomDataManager
 import com.lzk.lettin.business.main.vm.effect.DeviceControlSideEffect
 import com.lzk.lettin.business.main.vm.event.DeviceControlEvent
+import com.lzk.lettin.business.main.vm.state.AreaWithDevices
 import com.lzk.lettin.business.main.vm.state.DeviceControlUiState
+import com.lzk.lettin.business.main.vm.state.RoomWithAreas
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,6 +52,7 @@ class DeviceControlVM
 
         init {
             subscribeConnectionState()
+            loadDeviceData()
         }
 
         fun onEvent(event: DeviceControlEvent) {
@@ -76,6 +81,36 @@ class DeviceControlVM
 
                         else -> {}
                     }
+                }
+            }
+        }
+
+        private fun loadDeviceData() {
+            viewModelScope.launch(Dispatchers.IO) {
+                val rooms = RoomDataManager.getRoomTables()
+                val areas = RoomDataManager.getAreaTables()
+                val devices = RoomDataManager.getDeviceTables()
+
+                val roomWithAreasList =
+                    rooms.map { room ->
+                        val roomAreas = areas.filter { it.roomId == room.roomId }
+                        val roomDevices = devices.filter { it.roomId == room.roomId }
+                        val areaWithDevicesList =
+                            roomAreas.map { area ->
+                                AreaWithDevices(
+                                    area = area,
+                                    devices = devices.filter { it.areaId == area.areaId },
+                                )
+                            }
+                        RoomWithAreas(
+                            room = room,
+                            areas = areaWithDevicesList,
+                            deviceCount = roomDevices.size,
+                        )
+                    }
+
+                _state.update {
+                    it.copy(roomWithAreas = roomWithAreasList)
                 }
             }
         }
@@ -111,6 +146,7 @@ class DeviceControlVM
                 .syncGwTable(gwId, ip)
                 .onSuccess {
                     sendSideEffect(DeviceControlSideEffect.ShowToast("同步成功"))
+                    loadDeviceData()
                 }.onFailure {
                     sendSideEffect(DeviceControlSideEffect.ShowToast("同步失败: ${it.message}"))
                 }

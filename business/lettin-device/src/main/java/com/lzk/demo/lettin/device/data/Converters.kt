@@ -39,7 +39,7 @@ class Converters {
     fun fromIntList(value: List<Int>?): String? = value?.let { GsonUtils.toJson(it) }
 
     @TypeConverter
-    fun toIntList(value: String?): List<Int>? =
+    fun toIntList(value: String?): List<Int> =
         value?.let {
             runCatching {
                 GsonUtils.fromJsonToList(
@@ -47,7 +47,7 @@ class Converters {
                     Int::class.java,
                 )
             }.getOrNull()
-        }
+        } ?: emptyList()
 
     @TypeConverter
     fun fromSceneDes(value: SceneDes?): String? = value?.let { GsonUtils.toJson(it) }

@@ -38,7 +38,7 @@ data class DeviceTableBean(
     @ColumnInfo(name = "tag")
     val tag: String,
     @ColumnInfo(name = "groups")
-    val groups: List<Int>,
+    val groups: List<Int> = emptyList(),
     @ColumnInfo(name = "nwk_addr_info")
     val nwkAddrInfo: NwkAddrInfo?,
     @ColumnInfo(name = "basic_info")
