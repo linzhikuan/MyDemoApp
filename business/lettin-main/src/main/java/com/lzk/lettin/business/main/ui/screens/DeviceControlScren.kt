@@ -11,11 +11,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lzk.common.bean.device.ConnectionState
 import com.lzk.lettin.business.main.vm.DeviceControlVM
 import com.lzk.lettin.business.main.vm.effect.DeviceControlSideEffect
 import com.lzk.lettin.business.main.vm.event.DeviceControlEvent
@@ -42,20 +40,6 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(modifier = Modifier.weight(1f), text = "name:${state.gatewayInfo?.name}")
-            Button(onClick = {
-                state.gatewayInfo?.let { info ->
-                    vm.onEvent(
-                        DeviceControlEvent.Connect(
-                            ip = info.ip,
-                            port = info.port,
-                        ),
-                    )
-                }
-            }) {
-                Text(text = if (state.connectionState is ConnectionState.Connected) "已连接" else "连接")
-            }
-
             Button(onClick = {
                 state.gatewayInfo?.let { info ->
                     vm.onEvent(
@@ -66,7 +50,7 @@ fun deviceControlScreen(vm: DeviceControlVM = hiltViewModel()) {
                     )
                 }
             }) {
-                Text(text = "查询")
+                Text(text = "同步数据")
             }
         }
         HorizontalDivider(color = Color.Gray)
