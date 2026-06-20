@@ -27,10 +27,8 @@ class LettinDeviceServiceImpl : DeviceService {
         DeviceManager.instance.connectDevice(ip, port)
     }
 
-    override fun syncGwTable(
+    override suspend fun syncGwTable(
         gwMac: String,
         ip: String,
-    ) {
-        DeviceManager.instance.syncGwTable(gwMac, ip)
-    }
+    ): Result<Unit> = DeviceManager.instance.syncGwTable(gwMac, ip)
 }

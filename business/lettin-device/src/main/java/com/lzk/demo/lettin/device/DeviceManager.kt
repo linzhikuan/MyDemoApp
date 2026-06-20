@@ -163,11 +163,11 @@ class DeviceManager {
         }
     }
 
-    fun syncGwTable(
+    suspend fun syncGwTable(
         gwMac: String,
         ip: String,
-    ) {
-        scope.launch {
+    ): Result<Unit> {
+        return runCatching {
             lettinGwHelper.syncTable(ip, gwMac)
         }
     }

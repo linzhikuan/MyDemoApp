@@ -20,10 +20,10 @@ interface DeviceService : IProvider {
         port: Int,
     )
 
-    fun syncGwTable(
+    suspend fun syncGwTable(
         gwMac: String,
         ip: String,
-    )
+    ): Result<Unit>
 }
 
 fun getDeviceService(): DeviceService = ARouter.getInstance().navigation(DeviceService::class.java)

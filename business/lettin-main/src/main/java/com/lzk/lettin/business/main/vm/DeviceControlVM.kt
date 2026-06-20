@@ -84,7 +84,7 @@ class DeviceControlVM
             _sideEffect.send(effect)
         }
 
-        private fun handleEvent(event: DeviceControlEvent) {
+        private suspend fun handleEvent(event: DeviceControlEvent) {
             logI(TAG, "handleEvent:$event")
             when (event) {
                 is DeviceControlEvent.Connect -> {
@@ -102,10 +102,18 @@ class DeviceControlVM
             getDeviceService().connect(ip, port)
         }
 
-        private fun syncGwTable(
+        private suspend fun syncGwTable(
             gwId: String,
             ip: String,
         ) {
-            getDeviceService().syncGwTable(gwId, ip)
+            _state.update { it.copy(isRefreshing = true) }
+            getDeviceService()
+                .syncGwTable(gwId, ip)
+                .onSuccess {
+                    sendSideEffect(DeviceControlSideEffect.ShowToast("同步成功"))
+                }.onFailure {
+                    sendSideEffect(DeviceControlSideEffect.ShowToast("同步失败: ${it.message}"))
+                }
+            _state.update { it.copy(isRefreshing = false) }
         }
     }
