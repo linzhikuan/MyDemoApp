@@ -1,5 +1,5 @@
 # Android CI/CD Pipeline
-# 使用Docker镜像进行构建
+# 使用基础镜像 + Android SDK
 
 stages:
   - build
@@ -9,17 +9,30 @@ stages:
 variables:
   ANDROID_COMPILE_SDK: "34"
   ANDROID_BUILD_TOOLS: "34.0.0"
-  ANDROID_SDK_TOOLS: "10406996"
 
 # 构建阶段
 build:
   stage: build
-  image: mingc/android-build-box:latest
+  image: ubuntu:22.04
   tags:
     - android
   before_script:
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
+    - unzip -q /tmp/gradle.zip -d /opt
+    - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+    - mkdir -p /opt/android-sdk/cmdline-tools
+    - unzip -q /tmp/cmdline-tools.zip -d /opt/android-sdk/cmdline-tools
+    - mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+    - yes | sdkmanager --licenses 2>/dev/null || true
+    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
     - chmod +x ./gradlew
   script:
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - ./gradlew assembleDebug
   artifacts:
     paths:
@@ -33,12 +46,26 @@ build:
 # 单元测试
 unit_test:
   stage: test
-  image: mingc/android-build-box:latest
+  image: ubuntu:22.04
   tags:
     - android
   before_script:
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
+    - unzip -q /tmp/gradle.zip -d /opt
+    - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+    - mkdir -p /opt/android-sdk/cmdline-tools
+    - unzip -q /tmp/cmdline-tools.zip -d /opt/android-sdk/cmdline-tools
+    - mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+    - yes | sdkmanager --licenses 2>/dev/null || true
+    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
     - chmod +x ./gradlew
   script:
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - ./gradlew testDebugUnitTest
   artifacts:
     reports:
@@ -52,12 +79,26 @@ unit_test:
 # 代码检查
 lint:
   stage: test
-  image: mingc/android-build-box:latest
+  image: ubuntu:22.04
   tags:
     - android
   before_script:
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
+    - unzip -q /tmp/gradle.zip -d /opt
+    - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+    - mkdir -p /opt/android-sdk/cmdline-tools
+    - unzip -q /tmp/cmdline-tools.zip -d /opt/android-sdk/cmdline-tools
+    - mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+    - yes | sdkmanager --licenses 2>/dev/null || true
+    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
     - chmod +x ./gradlew
   script:
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - ./gradlew lintDebug
   artifacts:
     paths:
@@ -71,12 +112,26 @@ lint:
 # 发布版本构建
 build_release:
   stage: deploy
-  image: mingc/android-build-box:latest
+  image: ubuntu:22.04
   tags:
     - android
   before_script:
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
+    - unzip -q /tmp/gradle.zip -d /opt
+    - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+    - mkdir -p /opt/android-sdk/cmdline-tools
+    - unzip -q /tmp/cmdline-tools.zip -d /opt/android-sdk/cmdline-tools
+    - mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+    - yes | sdkmanager --licenses 2>/dev/null || true
+    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
     - chmod +x ./gradlew
   script:
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - ./gradlew assembleRelease
   artifacts:
     paths:
