@@ -9,6 +9,7 @@ stages:
 variables:
   ANDROID_COMPILE_SDK: "34"
   ANDROID_BUILD_TOOLS: "34.0.0"
+  DOCKER_DRIVER: overlay2
 
 # 构建阶段
 build:
@@ -17,7 +18,7 @@ build:
   tags:
     - android
   before_script:
-    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
     - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
@@ -33,7 +34,8 @@ build:
   script:
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - ./gradlew assembleDebug
+    - chmod +x ./gradlew
+    - ./gradlew assembleDebug --no-daemon
   artifacts:
     paths:
       - app/build/outputs/apk/debug/app-debug.apk
@@ -50,7 +52,7 @@ unit_test:
   tags:
     - android
   before_script:
-    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
     - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
@@ -66,7 +68,8 @@ unit_test:
   script:
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - ./gradlew testDebugUnitTest
+    - chmod +x ./gradlew
+    - ./gradlew testDebugUnitTest --no-daemon
   artifacts:
     reports:
       junit: app/build/reports/tests/testDebugUnitTest/
@@ -83,7 +86,7 @@ lint:
   tags:
     - android
   before_script:
-    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
     - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
@@ -99,7 +102,8 @@ lint:
   script:
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - ./gradlew lintDebug
+    - chmod +x ./gradlew
+    - ./gradlew lintDebug --no-daemon
   artifacts:
     paths:
       - app/build/reports/lint-results-debug.html
@@ -116,7 +120,7 @@ build_release:
   tags:
     - android
   before_script:
-    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
     - ln -sf /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
@@ -132,7 +136,8 @@ build_release:
   script:
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - ./gradlew assembleRelease
+    - chmod +x ./gradlew
+    - ./gradlew assembleRelease --no-daemon
   artifacts:
     paths:
       - app/build/outputs/apk/release/app-release.apk
