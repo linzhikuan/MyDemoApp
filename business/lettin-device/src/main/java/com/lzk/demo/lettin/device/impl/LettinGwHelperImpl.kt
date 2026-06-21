@@ -1,0 +1,107 @@
+package com.lzk.demo.lettin.device.impl
+
+import com.lzk.common.servicce.http.getHttpService
+import com.lzk.core.log.logD
+import com.lzk.core.log.logE
+import com.lzk.core.network.toJsonRequestBody
+import com.lzk.core.utils.GsonUtils
+import com.lzk.demo.lettin.device.Constants
+import com.lzk.demo.lettin.device.bean.AreaTableBean
+import com.lzk.demo.lettin.device.bean.DeviceTableBean
+import com.lzk.demo.lettin.device.bean.GwTableBean
+import com.lzk.demo.lettin.device.bean.RoomTableBean
+import com.lzk.demo.lettin.device.bean.SceneTableBean
+import com.lzk.demo.lettin.device.bean.SnapShotTableBean
+import com.lzk.demo.lettin.device.data.RoomDataManager
+import com.lzk.demo.lettin.device.inner.LettinAPI
+import com.lzk.demo.lettin.device.inner.LettinGwHelper
+import com.lzk.demo.lettin.device.utils.GwParamUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+class LettinGwHelperImpl : LettinGwHelper {
+    companion object {
+        private const val TAG = "LettinGwHelperImpl"
+    }
+
+    override suspend fun syncTable(
+        ip: String,
+        gwMac: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            runCatching {
+                getHttpService().getService(LettinAPI::class.java, ip).syncGwTable(
+                    GwParamUtils.syncGwTable(gwMac).toJsonRequestBody(),
+                )
+            }.onSuccess {
+                it.data?.forEach { tableBean ->
+                    logD(TAG, "tableId:${tableBean.tableId},${tableBean.tableArray}")
+                    val tableArrayJson = GsonUtils.toJson(tableBean.tableArray)
+                    when (tableBean.tableId) {
+                        Constants.LETTIN4_GW_T -> {
+                            GsonUtils
+                                .fromJsonToList<GwTableBean>(
+                                    tableArrayJson,
+                                    GwTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateGwTable(it)
+                                }
+                        }
+
+                        Constants.LETTIN4_DEV_T -> {
+                            GsonUtils
+                                .fromJsonToList<DeviceTableBean>(
+                                    tableArrayJson,
+                                    DeviceTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateDeviceTable(it)
+                                }
+                        }
+
+                        Constants.LETTIN4_ROOM_T -> {
+                            GsonUtils
+                                .fromJsonToList<RoomTableBean>(
+                                    tableArrayJson,
+                                    RoomTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateRoomTable(it)
+                                }
+                        }
+
+                        Constants.LETTIN4_AREA_T -> {
+                            GsonUtils
+                                .fromJsonToList<AreaTableBean>(
+                                    tableArrayJson,
+                                    AreaTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateAreaTable(it)
+                                }
+                        }
+
+                        Constants.LETTIN4_SNAPSHOT_T -> {
+                            GsonUtils
+                                .fromJsonToList<SnapShotTableBean>(
+                                    tableArrayJson,
+                                    SnapShotTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateSnapShotTable(it)
+                                }
+                        }
+
+                        Constants.LETTIN4_SCENE_T -> {
+                            GsonUtils
+                                .fromJsonToList<SceneTableBean>(
+                                    tableArrayJson,
+                                    SceneTableBean::class.java,
+                                ).also {
+                                    RoomDataManager.updateSceneTable(it)
+                                }
+                        }
+                    }
+                }
+            }.onFailure {
+                logE(TAG, "syncTableError", it)
+            }
+        }
+    }
+}
