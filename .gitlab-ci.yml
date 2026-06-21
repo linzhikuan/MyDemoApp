@@ -1,0 +1,87 @@
+# Android CI/CD Pipeline
+# 使用Docker镜像进行构建
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  ANDROID_COMPILE_SDK: "34"
+  ANDROID_BUILD_TOOLS: "34.0.0"
+  ANDROID_SDK_TOOLS: "10406996"
+
+# 构建阶段
+build:
+  stage: build
+  image: mingc/android-build-box:latest
+  tags:
+    - android
+  before_script:
+    - chmod +x ./gradlew
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - app/build/outputs/apk/debug/app-debug.apk
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# 单元测试
+unit_test:
+  stage: test
+  image: mingc/android-build-box:latest
+  tags:
+    - android
+  before_script:
+    - chmod +x ./gradlew
+  script:
+    - ./gradlew testDebugUnitTest
+  artifacts:
+    reports:
+      junit: app/build/reports/tests/testDebugUnitTest/
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# 代码检查
+lint:
+  stage: test
+  image: mingc/android-build-box:latest
+  tags:
+    - android
+  before_script:
+    - chmod +x ./gradlew
+  script:
+    - ./gradlew lintDebug
+  artifacts:
+    paths:
+      - app/build/reports/lint-results-debug.html
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# 发布版本构建
+build_release:
+  stage: deploy
+  image: mingc/android-build-box:latest
+  tags:
+    - android
+  before_script:
+    - chmod +x ./gradlew
+  script:
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - app/build/outputs/apk/release/app-release.apk
+    expire_in: 1 month
+  only:
+    - main
+  when: manual
