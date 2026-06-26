@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lzk.common.bean.device.LettinGatewayInfo
-import com.lzk.lettin.business.main.component.RefreshSample
 import com.lzk.lettin.business.main.vm.HomeVM
 import com.lzk.lettin.business.main.vm.effect.HomeUiSideEffect
 import com.lzk.lettin.business.main.vm.event.HomeUiEvent
