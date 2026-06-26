@@ -35,12 +35,14 @@ build:
   <<: *before_script_definition
   script:
     - echo "Starting build..."
-    - ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -200
+    - ./gradlew assembleDebug --no-daemon --stacktrace > build.log 2>&1; EXIT_CODE=$?; echo "Build exit code: $EXIT_CODE"; tail -100 build.log; exit $EXIT_CODE
   artifacts:
     paths:
+      - build.log
       - modules/lettin/build/outputs/apk/debug/*.apk
       - modules/ticket/build/outputs/apk/debug/*.apk
     expire_in: 1 week
+    when: always
   only:
     - main
     - develop
