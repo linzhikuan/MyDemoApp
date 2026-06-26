@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/business/lettin-device" />
             <option value="$PROJECT_DIR$/business/lettin-main" />
             <option value="$PROJECT_DIR$/business/lettin-user" />
+            <option value="$PROJECT_DIR$/business/ticket-main" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/common/bean" />
             <option value="$PROJECT_DIR$/common/service" />
@@ -28,6 +29,7 @@
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/modules" />
             <option value="$PROJECT_DIR$/modules/lettin" />
+            <option value="$PROJECT_DIR$/modules/ticket" />
           </set>
         </option>
       </GradleProjectSettings>

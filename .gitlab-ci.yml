@@ -10,10 +10,7 @@ variables:
   ANDROID_COMPILE_SDK: "34"
   ANDROID_BUILD_TOOLS: "34.0.0"
   DOCKER_DRIVER: overlay2
-  GIT_STRATEGY: clone
-  GIT_DEPTH: 1
-  GIT_CLONE_PATH: /builds/$CI_COMMIT_REF_SLUG
-  GIT_CLONE_URL: http://gitlab/linzhikuan/mydemoapp.git
+  GIT_STRATEGY: none
 
 # 构建阶段
 build:
@@ -22,6 +19,7 @@ build:
   tags:
     - android
   before_script:
+    - echo "172.19.0.2 gitlab" >> /etc/hosts
     - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
@@ -34,11 +32,12 @@ build:
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - yes | sdkmanager --licenses 2>/dev/null || true
     - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-    - chmod +x ./gradlew
   script:
+    - git clone http://gitlab/linzhikuan/mydemoapp.git /builds/main
+    - cd /builds/main
+    - chmod +x ./gradlew
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - chmod +x ./gradlew
     - ./gradlew assembleDebug --no-daemon
   artifacts:
     paths:
@@ -56,6 +55,7 @@ unit_test:
   tags:
     - android
   before_script:
+    - echo "172.19.0.2 gitlab" >> /etc/hosts
     - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
@@ -68,11 +68,12 @@ unit_test:
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - yes | sdkmanager --licenses 2>/dev/null || true
     - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-    - chmod +x ./gradlew
   script:
+    - git clone http://gitlab/linzhikuan/mydemoapp.git /builds/main
+    - cd /builds/main
+    - chmod +x ./gradlew
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - chmod +x ./gradlew
     - ./gradlew testDebugUnitTest --no-daemon
   artifacts:
     reports:
@@ -90,6 +91,7 @@ lint:
   tags:
     - android
   before_script:
+    - echo "172.19.0.2 gitlab" >> /etc/hosts
     - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
@@ -102,11 +104,12 @@ lint:
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - yes | sdkmanager --licenses 2>/dev/null || true
     - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-    - chmod +x ./gradlew
   script:
+    - git clone http://gitlab/linzhikuan/mydemoapp.git /builds/main
+    - cd /builds/main
+    - chmod +x ./gradlew
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - chmod +x ./gradlew
     - ./gradlew lintDebug --no-daemon
   artifacts:
     paths:
@@ -124,6 +127,7 @@ build_release:
   tags:
     - android
   before_script:
+    - echo "172.19.0.2 gitlab" >> /etc/hosts
     - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
     - wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
     - unzip -q /tmp/gradle.zip -d /opt
@@ -136,11 +140,12 @@ build_release:
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
     - yes | sdkmanager --licenses 2>/dev/null || true
     - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-    - chmod +x ./gradlew
   script:
+    - git clone http://gitlab/linzhikuan/mydemoapp.git /builds/main
+    - cd /builds/main
+    - chmod +x ./gradlew
     - export ANDROID_HOME=/opt/android-sdk
     - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - chmod +x ./gradlew
     - ./gradlew assembleRelease --no-daemon
   artifacts:
     paths:

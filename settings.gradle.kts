@@ -52,10 +52,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyDemoApp"
 include(":modules:lettin")
+include(":modules:ticket")
+
 include(":business:lettin-main")
 include(":business:lettin-device")
 include(":business:lettin-user")
 include(":business:http")
+include(":business:ticket-main")
 
 include(":common:service")
 include(":common:bean")
