@@ -6,33 +6,18 @@ variables:
   ANDROID_BUILD_TOOLS: "34.0.0"
   ANDROID_HOME: "/opt/android-sdk"
   ANDROID_SDK_ROOT: "/opt/android-sdk"
+  JAVA_HOME: "/usr/lib/jvm/java-17-openjdk-amd64"
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx1024m -XX:MaxMetaspaceSize=256m -Dfile.encoding=UTF-8 -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process"
 
 build:
   stage: build
-  image: ubuntu:22.04
+  image: android-ci:amd64
   before_script:
     - echo "=== System info ==="
     - uname -a
     - dpkg --print-architecture
-    - export DEBIAN_FRONTEND=noninteractive
-    - echo "=== Installing qemu-user-static for x86_64 binary support ==="
-    - apt-get update -y
-    - apt-get install -y --no-install-recommends openjdk-17-jdk wget unzip git ca-certificates qemu-user-static binfmt-support
-    - echo "=== Registering binfmt for x86_64 ==="
-    - mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc 2>/dev/null || true
-    - update-binfmts --enable qemu-x86_64 2>/dev/null || true
-    - echo "x86_64 support enabled"
-    - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-$(dpkg --print-architecture)
     - echo "JAVA_HOME=$JAVA_HOME"
-    - echo "=== Setting up Android SDK ==="
-    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
-    - mkdir -p $ANDROID_HOME/cmdline-tools
-    - unzip -q /tmp/cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
-    - mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - yes | sdkmanager --licenses 2>/dev/null || true
-    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+    - echo "ANDROID_HOME=$ANDROID_HOME"
     - echo "sdk.dir=$ANDROID_HOME" > local.properties
     - chmod +x ./gradlew
   script:
