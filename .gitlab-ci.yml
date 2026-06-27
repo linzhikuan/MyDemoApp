@@ -16,8 +16,13 @@ build:
     - uname -a
     - dpkg --print-architecture
     - export DEBIAN_FRONTEND=noninteractive
+    - echo "=== Installing qemu-user-static for x86_64 binary support ==="
     - apt-get update -y
-    - apt-get install -y --no-install-recommends openjdk-17-jdk wget unzip git ca-certificates
+    - apt-get install -y --no-install-recommends openjdk-17-jdk wget unzip git ca-certificates qemu-user-static binfmt-support
+    - echo "=== Registering binfmt for x86_64 ==="
+    - mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc 2>/dev/null || true
+    - update-binfmts --enable qemu-x86_64 2>/dev/null || true
+    - echo "x86_64 support enabled"
     - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-$(dpkg --print-architecture)
     - echo "JAVA_HOME=$JAVA_HOME"
     - echo "=== Setting up Android SDK ==="
