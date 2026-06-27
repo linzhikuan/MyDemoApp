@@ -11,36 +11,33 @@ variables:
   ANDROID_HOME: "/opt/android-sdk"
   DOCKER_DRIVER: overlay2
 
-.before_script_template: &before_script_definition
-  before_script:
-    - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
-    - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
-    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
-    - mkdir -p $ANDROID_HOME/cmdline-tools
-    - unzip -q /tmp/cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
-    - mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-    - yes | sdkmanager --licenses 2>/dev/null || true
-    - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-    - echo "sdk.dir=$ANDROID_HOME" > local.properties
-    - cat local.properties
-    - chmod +x ./gradlew
-    - set -o pipefail
+before_script:
+  - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
+  - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
+  - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip
+  - mkdir -p $ANDROID_HOME/cmdline-tools
+  - unzip -q /tmp/cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+  - mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+  - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+  - yes | sdkmanager --licenses 2>/dev/null || true
+  - sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+  - echo "sdk.dir=$ANDROID_HOME" > local.properties
+  - cat local.properties
+  - chmod +x ./gradlew
 
 build:
   stage: build
   image: ubuntu:22.04
   tags:
     - android
-  <<: *before_script_definition
   script:
     - echo "Starting build..."
-    - ./gradlew assembleDebug --no-daemon --stacktrace > build.log 2>&1; EXIT_CODE=$?; echo "Build exit code: $EXIT_CODE"; tail -100 build.log; exit $EXIT_CODE
+    - ./gradlew assembleDebug --no-daemon --stacktrace
+  after_script:
+    - echo "Build finished with exit code $CI_JOB_STATUS"
   artifacts:
     paths:
-      - build.log
-      - modules/lettin/build/outputs/apk/debug/*.apk
-      - modules/ticket/build/outputs/apk/debug/*.apk
+      - "**/build/outputs/apk/debug/*.apk"
     expire_in: 1 week
     when: always
   only:
@@ -53,13 +50,13 @@ unit_test:
   image: ubuntu:22.04
   tags:
     - android
-  <<: *before_script_definition
   script:
-    - ./gradlew testDebugUnitTest --no-daemon --stacktrace 2>&1 | tail -100
+    - ./gradlew testDebugUnitTest --no-daemon --stacktrace
   artifacts:
     reports:
-      junit: "**/build/reports/tests/testDebugUnitTest/TEST-*.xml"
+      junit: "**/build/test-results/testDebugUnitTest/TEST-*.xml"
     expire_in: 1 week
+    when: always
   only:
     - main
     - develop
@@ -70,13 +67,13 @@ lint:
   image: ubuntu:22.04
   tags:
     - android
-  <<: *before_script_definition
   script:
-    - ./gradlew lintDebug --no-daemon --stacktrace 2>&1 | tail -100
+    - ./gradlew lintDebug --no-daemon --stacktrace
   artifacts:
     paths:
       - "**/build/reports/lint-results-debug.html"
     expire_in: 1 week
+    when: always
   only:
     - main
     - develop
@@ -87,14 +84,13 @@ build_release:
   image: ubuntu:22.04
   tags:
     - android
-  <<: *before_script_definition
   script:
-    - ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 | tail -100
+    - ./gradlew assembleRelease --no-daemon --stacktrace
   artifacts:
     paths:
-      - modules/lettin/build/outputs/apk/release/*.apk
-      - modules/ticket/build/outputs/apk/release/*.apk
+      - "**/build/outputs/apk/release/*.apk"
     expire_in: 1 month
+    when: always
   only:
     - main
   when: manual
