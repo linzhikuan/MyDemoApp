@@ -28,10 +28,12 @@ android {
     }
 }
 dependencies {
-    implementation(project(":business:lettin-main"))
+    implementation(project(":business:ticket-main"))
     implementation(project(":business:lettin-device"))
-    implementation(project(":business:lettin-user"))
     implementation(project(":business:http"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:log"))
+    implementation(project(":core:mmkv"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
