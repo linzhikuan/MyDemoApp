@@ -32,11 +32,14 @@ build:
     - android
   script:
     - echo "Starting build..."
-    - ./gradlew assembleDebug --no-daemon --stacktrace
+    - ./gradlew assembleDebug --no-daemon --stacktrace > build_output.log 2>&1
   after_script:
-    - echo "Build finished with exit code $CI_JOB_STATUS"
+    - echo "=== Build output (last 200 lines) ==="
+    - tail -200 build_output.log
+    - echo "=== End of build output ==="
   artifacts:
     paths:
+      - build_output.log
       - "**/build/outputs/apk/debug/*.apk"
     expire_in: 1 week
     when: always
