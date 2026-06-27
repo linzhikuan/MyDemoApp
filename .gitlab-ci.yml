@@ -10,6 +10,8 @@ variables:
   ANDROID_BUILD_TOOLS: "34.0.0"
   ANDROID_HOME: "/opt/android-sdk"
   DOCKER_DRIVER: overlay2
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx1g -XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false"
+  JAVA_OPTS: "-Xmx1g"
 
 before_script:
   - apt-get update && apt-get install -y openjdk-17-jdk wget unzip git sudo
