@@ -8,6 +8,8 @@ import com.lzk.lettin.business.main.data.model.LotteryType
  * 只需在 [LotteryDataModule] 切换注入的实现类即可。
  */
 interface LotteryRemoteDataSource {
-
-    suspend fun fetchLatest(type: LotteryType, count: Int = 30): List<com.lzk.lettin.business.main.data.model.LotteryDraw>
+    suspend fun fetchLatest(
+        type: LotteryType,
+        count: Int = 30,
+    ): List<com.lzk.lettin.business.main.data.model.LotteryDraw>
 }

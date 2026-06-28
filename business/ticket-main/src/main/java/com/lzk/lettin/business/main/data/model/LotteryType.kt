@@ -39,7 +39,6 @@ enum class LotteryType(
     val backTotal: Int get() = backRange.last - backRange.first + 1
 
     companion object {
-        fun from(raw: String?): LotteryType =
-            values().firstOrNull { it.name == raw } ?: SSQ
+        fun from(raw: String?): LotteryType = values().firstOrNull { it.name == raw } ?: SSQ
     }
 }

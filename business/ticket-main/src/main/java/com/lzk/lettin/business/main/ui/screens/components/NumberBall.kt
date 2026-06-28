@@ -31,20 +31,22 @@ fun NumberBall(
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
-    val bgColor = when {
-        isFront -> Color(0xFFE53935)
-        else -> Color(0xFF1E88E5)
-    }
+    val bgColor =
+        when {
+            isFront -> Color(0xFFE53935)
+            else -> Color(0xFF1E88E5)
+        }
     val baseBg = if (highlight) bgColor else Color(0xFFE0E0E0)
     val borderColor = if (highlight) Color(0xFFFFC107) else bgColor
     Box(
-        modifier = modifier
-            .size(size)
-            .background(baseBg, CircleShape)
-            .border(2.dp, borderColor, CircleShape)
-            .then(
-                if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
-            ),
+        modifier =
+            modifier
+                .size(size)
+                .background(baseBg, CircleShape)
+                .border(2.dp, borderColor, CircleShape)
+                .then(
+                    if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -66,7 +68,9 @@ fun NumberRow(
 ) {
     androidx.compose.foundation.layout.Row(
         modifier = modifier,
-        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(gap),
+        horizontalArrangement =
+            androidx.compose.foundation.layout.Arrangement
+                .spacedBy(gap),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         frontNumbers.forEach {

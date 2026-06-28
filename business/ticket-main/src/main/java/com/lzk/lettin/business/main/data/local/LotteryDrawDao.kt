@@ -9,12 +9,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LotteryDrawDao {
+    @Query("SELECT * FROM lottery_draw WHERE type = :type ORDER BY issueNo DESC LIMIT :limit")
+    fun observeLatest(
+        type: String,
+        limit: Int = 50,
+    ): Flow<List<LotteryDraw>>
 
     @Query("SELECT * FROM lottery_draw WHERE type = :type ORDER BY issueNo DESC LIMIT :limit")
-    fun observeLatest(type: String, limit: Int = 50): Flow<List<LotteryDraw>>
-
-    @Query("SELECT * FROM lottery_draw WHERE type = :type ORDER BY issueNo DESC LIMIT :limit")
-    suspend fun getLatest(type: String, limit: Int = 50): List<LotteryDraw>
+    suspend fun getLatest(
+        type: String,
+        limit: Int = 50,
+    ): List<LotteryDraw>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(list: List<LotteryDraw>)

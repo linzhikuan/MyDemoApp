@@ -68,17 +68,25 @@ fun HistoryTab(type: LotteryType) {
                 items(state.draws) { draw ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                        ),
+                        colors =
+                            CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            ),
                     ) {
                         Column(Modifier.padding(12.dp)) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text("第 ${draw.issueNo} 期", style = MaterialTheme.typography.bodyMedium)
+                                Text(
+                                    "第 ${draw.issueNo} 期",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
                                 Spacer(Modifier.padding(6.dp))
-                                Text(draw.date, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(
+                                    draw.date,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
                             }
                             Spacer(Modifier.height(8.dp))
                             NumberRow(

@@ -13,28 +13,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryVM @Inject constructor(
-    private val repository: LotteryRepository,
-) : ViewModel() {
+class HistoryVM
+    @Inject
+    constructor(
+        private val repository: LotteryRepository,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(HistoryUiState(loading = true, draws = emptyList()))
+        val state: StateFlow<HistoryUiState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(HistoryUiState(loading = true, draws = emptyList()))
-    val state: StateFlow<HistoryUiState> = _state.asStateFlow()
+        fun load(
+            type: LotteryType,
+            limit: Int = 50,
+        ) {
+            viewModelScope.launch {
+                _state.value = HistoryUiState(loading = true, draws = emptyList())
+                repository.observeLatest(type, limit).collect { list ->
+                    _state.value = HistoryUiState(loading = false, draws = list)
+                }
+            }
+        }
 
-    fun load(type: LotteryType, limit: Int = 50) {
-        viewModelScope.launch {
-            _state.value = HistoryUiState(loading = true, draws = emptyList())
-            repository.observeLatest(type, limit).collect { list ->
-                _state.value = HistoryUiState(loading = false, draws = list)
+        fun refresh(type: LotteryType) {
+            viewModelScope.launch {
+                repository.refresh(type, 30)
             }
         }
     }
-
-    fun refresh(type: LotteryType) {
-        viewModelScope.launch {
-            repository.refresh(type, 30)
-        }
-    }
-}
 
 data class HistoryUiState(
     val loading: Boolean,

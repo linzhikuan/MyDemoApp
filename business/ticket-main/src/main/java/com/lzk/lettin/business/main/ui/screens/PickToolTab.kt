@@ -3,6 +3,7 @@ package com.lzk.lettin.business.main.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,13 +60,20 @@ fun PickToolTab(type: LotteryType) {
             colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD)),
         ) {
             Column(Modifier.padding(12.dp)) {
-                Text("选号说明", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                Text(
+                    "选号说明",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     "双色球: ${type.frontRange.first}-${type.frontRange.last} 选 ${type.frontCount} + ${type.backRange.first}-${type.backRange.last} 选 ${type.backCount}。",
                     style = MaterialTheme.typography.bodySmall,
                 )
-                Text("机选无任何科学性保证，仅为娱乐演示。请理性购彩，未成年人禁止购彩。", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    "机选无任何科学性保证，仅为娱乐演示。请理性购彩，未成年人禁止购彩。",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
 
@@ -119,7 +126,11 @@ fun PickToolTab(type: LotteryType) {
         }
 
         Spacer(Modifier.height(8.dp))
-        Text("生成的号码", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(
+            "生成的号码",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+        )
 
         val list = state.generated
         if (list == null) {

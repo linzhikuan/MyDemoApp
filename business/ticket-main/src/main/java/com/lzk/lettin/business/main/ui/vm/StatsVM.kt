@@ -14,21 +14,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StatsVM @Inject constructor(
-    private val repository: LotteryRepository,
-) : ViewModel() {
+class StatsVM
+    @Inject
+    constructor(
+        private val repository: LotteryRepository,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(StatsUiState(loading = true, null))
+        val state: StateFlow<StatsUiState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(StatsUiState(loading = true, null))
-    val state: StateFlow<StatsUiState> = _state.asStateFlow()
-
-    fun load(type: LotteryType, lookBack: Int = 30) {
-        viewModelScope.launch {
-            val draws = repository.getLatest(type, lookBack)
-            val result = FrequencyAnalyzer.analyze(type, draws)
-            _state.value = StatsUiState(loading = false, result = result)
+        fun load(
+            type: LotteryType,
+            lookBack: Int = 30,
+        ) {
+            viewModelScope.launch {
+                val draws = repository.getLatest(type, lookBack)
+                val result = FrequencyAnalyzer.analyze(type, draws)
+                _state.value = StatsUiState(loading = false, result = result)
+            }
         }
     }
-}
 
 data class StatsUiState(
     val loading: Boolean,

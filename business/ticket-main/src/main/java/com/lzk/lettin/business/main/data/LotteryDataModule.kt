@@ -34,7 +34,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LotteryDataModule {
-
     // 填真实彩票开奖 API 的 baseUrl。
     // 当前使用 huiniao.top 的免费 HTTPS 线路。
     private const val LOTTERY_BASE_URL = "https://api.huiniao.top/"
@@ -45,10 +44,12 @@ object LotteryDataModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
-        }
-        return OkHttpClient.Builder()
+        val logging =
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BASIC
+            }
+        return OkHttpClient
+            .Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
@@ -58,39 +59,38 @@ object LotteryDataModule {
 
     @Provides
     @Singleton
-    fun provideLotteryApi(client: OkHttpClient): LotteryApi {
-        return Retrofit.Builder()
+    fun provideLotteryApi(client: OkHttpClient): LotteryApi =
+        Retrofit
+            .Builder()
             .baseUrl(LOTTERY_BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LotteryApi::class.java)
-    }
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): LotteryDatabase =
-        LotteryDatabase.get(context)
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+    ): LotteryDatabase = LotteryDatabase.get(context)
 
     @Provides
     @Singleton
     fun provideRemoteDataSource(
         @ApplicationContext context: Context,
         api: LotteryApi,
-    ): LotteryRemoteDataSource {
-        return if (shouldUseRealApi()) {
+    ): LotteryRemoteDataSource =
+        if (shouldUseRealApi()) {
             RealLotteryRemoteDataSource(api = api, ioDispatcher = Dispatchers.IO)
         } else {
             // 兼容 fallback：如果 baseUrl 留空，走本地 assets mock 数据
             MockLotteryRemoteDataSource(context, com.google.gson.Gson())
         }
-    }
 
     @Provides
     @Singleton
     fun provideRepository(
         db: LotteryDatabase,
         remote: LotteryRemoteDataSource,
-    ): LotteryRepository =
-        LotteryRepository(db.lotteryDrawDao(), remote, db.savedTicketDao())
+    ): LotteryRepository = LotteryRepository(db.lotteryDrawDao(), remote, db.savedTicketDao())
 }

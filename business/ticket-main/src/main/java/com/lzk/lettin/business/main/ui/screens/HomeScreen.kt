@@ -57,10 +57,11 @@ fun HomeScreen(
         },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
         ) {
             Text(
                 "选择要分析的彩种",
@@ -91,17 +92,20 @@ private fun LotteryTypeCard(
     onClick: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp)
-            .clickable { onClick() },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(110.dp)
+                .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = when (type) {
-                LotteryType.SSQ -> Color(0xFFFFF3E0)
-                LotteryType.DLT -> Color(0xFFE3F2FD)
-            },
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    when (type) {
+                        LotteryType.SSQ -> Color(0xFFFFF3E0)
+                        LotteryType.DLT -> Color(0xFFE3F2FD)
+                    },
+            ),
     ) {
         Box(Modifier.fillMaxSize().padding(16.dp)) {
             Column(Modifier.fillMaxSize()) {

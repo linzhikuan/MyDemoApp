@@ -36,8 +36,6 @@ data class LotteryDraw(
     val secondPrize: Long? = null,
 )
 
-fun String.parseNumbers(): List<Int> =
-    split(',').mapNotNull { it.trim().toIntOrNull() }
+fun String.parseNumbers(): List<Int> = split(',').mapNotNull { it.trim().toIntOrNull() }
 
-fun List<Int>.toNumberString(): String =
-    sorted().joinToString(",")
+fun List<Int>.toNumberString(): String = sorted().joinToString(",")

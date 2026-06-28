@@ -82,7 +82,11 @@ fun StatsTab(type: LotteryType) {
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         ) {
             Column(Modifier.padding(12.dp)) {
-                Text("冷 / 热号", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "冷 / 热号",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
                 Spacer(Modifier.height(6.dp))
                 NumberListChip("前区热号", result.hotFront)
                 NumberListChip("前区冷号", result.coldFront)
@@ -103,12 +107,22 @@ fun StatsTab(type: LotteryType) {
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         ) {
             Column(Modifier.padding(12.dp)) {
-                Text("遗漏值（越大越久未出）", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "遗漏值（越大越久未出）",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
                 Spacer(Modifier.height(6.dp))
-                val frontTopMiss = result.frontMiss.entries.sortedByDescending { it.value }.take(10)
+                val frontTopMiss =
+                    result.frontMiss.entries
+                        .sortedByDescending { it.value }
+                        .take(10)
                 Text("前区 Top-10 遗漏: " + frontTopMiss.joinToString(" , ") { "${it.key}(${it.value})" })
                 Spacer(Modifier.height(4.dp))
-                val backTopMiss = result.backMiss.entries.sortedByDescending { it.value }.take(6)
+                val backTopMiss =
+                    result.backMiss.entries
+                        .sortedByDescending { it.value }
+                        .take(6)
                 Text("后区 Top 遗漏: " + backTopMiss.joinToString(" , ") { "${it.key}(${it.value})" })
             }
         }

@@ -13,7 +13,6 @@ import retrofit2.http.Query
  * 由 [RealLotteryRemoteDataSource] 负责按【SSQ / DLT】规则拼装为 frontNumbers/backNumbers。
  */
 interface LotteryApi {
-
     @GET("interface/home/lotteryHistory")
     suspend fun getHistory(
         @Query("type") type: String,

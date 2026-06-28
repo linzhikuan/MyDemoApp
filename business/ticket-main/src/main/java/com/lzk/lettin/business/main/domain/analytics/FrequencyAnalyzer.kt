@@ -28,8 +28,10 @@ data class StatsResult(
 )
 
 object FrequencyAnalyzer {
-
-    fun analyze(type: LotteryType, draws: List<LotteryDraw>): StatsResult {
+    fun analyze(
+        type: LotteryType,
+        draws: List<LotteryDraw>,
+    ): StatsResult {
         if (draws.isEmpty()) {
             return StatsResult(
                 type = type,
@@ -57,9 +59,10 @@ object FrequencyAnalyzer {
         for (n in type.backRange) backMiss[n] = 0
 
         // 为计算"和值趋势"：按时间从老到新
-        val sumTrend = draws.asReversed().map { draw ->
-            draw.frontNumbers.parseNumbers().sum() + draw.backNumbers.parseNumbers().sum()
-        }
+        val sumTrend =
+            draws.asReversed().map { draw ->
+                draw.frontNumbers.parseNumbers().sum() + draw.backNumbers.parseNumbers().sum()
+            }
 
         // 奇偶计数
         var oddCount = 0
@@ -98,10 +101,26 @@ object FrequencyAnalyzer {
         val kFront = 6.coerceAtMost(type.frontTotal)
         val kBack = 2.coerceAtMost(type.backTotal)
 
-        val hotFront = frontFreq.entries.sortedByDescending { it.value }.take(kFront).map { it.key }
-        val coldFront = frontFreq.entries.sortedBy { it.value }.take(kFront).map { it.key }
-        val hotBack = backFreq.entries.sortedByDescending { it.value }.take(kBack).map { it.key }
-        val coldBack = backFreq.entries.sortedBy { it.value }.take(kBack).map { it.key }
+        val hotFront =
+            frontFreq.entries
+                .sortedByDescending { it.value }
+                .take(kFront)
+                .map { it.key }
+        val coldFront =
+            frontFreq.entries
+                .sortedBy { it.value }
+                .take(kFront)
+                .map { it.key }
+        val hotBack =
+            backFreq.entries
+                .sortedByDescending { it.value }
+                .take(kBack)
+                .map { it.key }
+        val coldBack =
+            backFreq.entries
+                .sortedBy { it.value }
+                .take(kBack)
+                .map { it.key }
 
         return StatsResult(
             type = type,

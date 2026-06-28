@@ -22,7 +22,10 @@ import com.lzk.lettin.business.main.data.model.LotteryType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LotteryDetailScreen(type: LotteryType, onBack: () -> Unit) {
+fun LotteryDetailScreen(
+    type: LotteryType,
+    onBack: () -> Unit,
+) {
     val tabs = remember { listOf("历史开奖", "数据统计", "预测推荐", "选号工具") }
     var selected by remember { mutableIntStateOf(0) }
 

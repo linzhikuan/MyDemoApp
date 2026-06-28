@@ -66,7 +66,11 @@ fun PredictTab(type: LotteryType) {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("推荐号码", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                "推荐号码",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
             Spacer(Modifier.padding(6.dp))
             OutlinedButton(onClick = { vm.load(type) }) {
                 Text("换一批")
@@ -79,6 +83,7 @@ fun PredictTab(type: LotteryType) {
                     CircularProgressIndicator()
                 }
             }
+
             state.message != null -> Text(state.message!!)
             else -> {
                 LazyColumn(
@@ -106,7 +111,11 @@ private fun PredictedTicketCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     ) {
         Column(Modifier.padding(12.dp)) {
-            Text(ticket.note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                ticket.note,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Spacer(Modifier.height(8.dp))
             NumberRow(frontNumbers = ticket.front, backNumbers = ticket.back)
             Spacer(Modifier.height(8.dp))

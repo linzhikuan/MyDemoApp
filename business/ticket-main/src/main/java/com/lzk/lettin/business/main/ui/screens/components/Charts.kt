@@ -43,7 +43,9 @@ fun BarChart(
                 drawRect(
                     color = color,
                     topLeft = Offset(left, size.height - barHeight),
-                    size = androidx.compose.ui.geometry.Size(barWidth, barHeight),
+                    size =
+                        androidx.compose.ui.geometry
+                            .Size(barWidth, barHeight),
                 )
             }
         }
@@ -86,7 +88,10 @@ fun LineChart(
 }
 
 @Composable
-fun NumberListChip(label: String, nums: List<Int>) {
+fun NumberListChip(
+    label: String,
+    nums: List<Int>,
+) {
     Row(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),

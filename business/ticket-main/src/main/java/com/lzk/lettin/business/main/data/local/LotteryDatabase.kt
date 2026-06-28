@@ -13,21 +13,22 @@ import com.lzk.lettin.business.main.data.model.SavedTicket
     exportSchema = false,
 )
 abstract class LotteryDatabase : RoomDatabase() {
-
     abstract fun lotteryDrawDao(): LotteryDrawDao
+
     abstract fun savedTicketDao(): SavedTicketDao
 
     companion object {
-        @Volatile private var instance: LotteryDatabase? = null
+        @Volatile
+        private var instance: LotteryDatabase? = null
 
         fun get(context: Context): LotteryDatabase =
             instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    LotteryDatabase::class.java,
-                    "lottery.db",
-                )
-                    .fallbackToDestructiveMigration()
+                instance ?: Room
+                    .databaseBuilder(
+                        context.applicationContext,
+                        LotteryDatabase::class.java,
+                        "lottery.db",
+                    ).fallbackToDestructiveMigration()
                     .build()
                     .also { instance = it }
             }

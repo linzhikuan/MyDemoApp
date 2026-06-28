@@ -47,27 +47,28 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class MyTicketsVM @Inject constructor(
-    private val repository: LotteryRepository,
-) : ViewModel() {
+class MyTicketsVM
+    @Inject
+    constructor(
+        private val repository: LotteryRepository,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(emptyList<SavedTicket>())
+        val state: StateFlow<List<SavedTicket>> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(emptyList<SavedTicket>())
-    val state: StateFlow<List<SavedTicket>> = _state.asStateFlow()
+        fun load() {
+            viewModelScope.launch {
+                repository.observeSavedTickets().collect { list ->
+                    _state.value = list
+                }
+            }
+        }
 
-    fun load() {
-        viewModelScope.launch {
-            repository.observeSavedTickets().collect { list ->
-                _state.value = list
+        fun delete(ticket: SavedTicket) {
+            viewModelScope.launch {
+                repository.deleteTicket(ticket)
             }
         }
     }
-
-    fun delete(ticket: SavedTicket) {
-        viewModelScope.launch {
-            repository.deleteTicket(ticket)
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,9 +106,10 @@ fun MyTicketsScreen(onBack: () -> Unit) {
                     items(items = list) { saved ->
                         Card(
                             modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            ),
+                            colors =
+                                CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                ),
                         ) {
                             Column(Modifier.padding(12.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {

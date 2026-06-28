@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedTicketDao {
-
     @Query("SELECT * FROM saved_ticket WHERE type = :type ORDER BY createdAt DESC")
     fun observeByType(type: String): Flow<List<SavedTicket>>
 

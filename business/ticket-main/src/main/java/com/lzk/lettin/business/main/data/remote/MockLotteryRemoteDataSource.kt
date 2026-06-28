@@ -3,9 +3,9 @@ package com.lzk.lettin.business.main.data.remote
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.lzk.core.log.logW
 import com.lzk.lettin.business.main.data.model.LotteryDraw
 import com.lzk.lettin.business.main.data.model.LotteryType
-import com.lzk.core.log.logW
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,7 +17,6 @@ class MockLotteryRemoteDataSource(
     private val context: Context,
     private val gson: Gson = Gson(),
 ) : LotteryRemoteDataSource {
-
     private data class RawDraw(
         val issueNo: String,
         val date: String,
@@ -25,12 +24,16 @@ class MockLotteryRemoteDataSource(
         val backNumbers: String,
     )
 
-    override suspend fun fetchLatest(type: LotteryType, count: Int): List<LotteryDraw> =
+    override suspend fun fetchLatest(
+        type: LotteryType,
+        count: Int,
+    ): List<LotteryDraw> =
         withContext(Dispatchers.IO) {
-            val assetFile = when (type) {
-                LotteryType.SSQ -> "ssq_mock.json"
-                LotteryType.DLT -> "dlt_mock.json"
-            }
+            val assetFile =
+                when (type) {
+                    LotteryType.SSQ -> "ssq_mock.json"
+                    LotteryType.DLT -> "dlt_mock.json"
+                }
             runCatching {
                 context.assets.open(assetFile).use { stream ->
                     val text = stream.bufferedReader().readText()
@@ -46,7 +49,11 @@ class MockLotteryRemoteDataSource(
                         )
                     }
                 }
-            }.onFailure { logW("MockLotteryRemoteDataSource", "读取 asset $assetFile 失败: ${it.message}") }
-                .getOrDefault(emptyList())
+            }.onFailure {
+                logW(
+                    "MockLotteryRemoteDataSource",
+                    "读取 asset $assetFile 失败: ${it.message}",
+                )
+            }.getOrDefault(emptyList())
         }
 }
