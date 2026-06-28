@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":core:utils"))
     implementation(project(":core:log"))
     implementation(project(":core:mmkv"))
+    implementation(project(":core:database"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

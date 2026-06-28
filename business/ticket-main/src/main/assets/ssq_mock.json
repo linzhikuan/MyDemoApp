@@ -1,0 +1,22 @@
+[
+  { "issueNo": "2024092", "date": "2024-08-11", "frontNumbers": "1,8,15,22,29,33", "backNumbers": "12" },
+  { "issueNo": "2024091", "date": "2024-08-08", "frontNumbers": "3,7,11,18,24,30", "backNumbers": "5" },
+  { "issueNo": "2024090", "date": "2024-08-06", "frontNumbers": "2,9,14,20,25,28", "backNumbers": "9" },
+  { "issueNo": "2024089", "date": "2024-08-04", "frontNumbers": "4,6,13,17,21,31", "backNumbers": "2" },
+  { "issueNo": "2024088", "date": "2024-08-01", "frontNumbers": "5,10,16,23,27,32", "backNumbers": "14" },
+  { "issueNo": "2024087", "date": "2024-07-30", "frontNumbers": "1,11,15,19,26,30", "backNumbers": "7" },
+  { "issueNo": "2024086", "date": "2024-07-28", "frontNumbers": "6,8,12,22,29,33", "backNumbers": "11" },
+  { "issueNo": "2024085", "date": "2024-07-25", "frontNumbers": "3,9,14,20,24,31", "backNumbers": "16" },
+  { "issueNo": "2024084", "date": "2024-07-23", "frontNumbers": "2,7,13,18,25,28", "backNumbers": "6" },
+  { "issueNo": "2024083", "date": "2024-07-21", "frontNumbers": "4,10,17,21,27,32", "backNumbers": "3" },
+  { "issueNo": "2024082", "date": "2024-07-18", "frontNumbers": "1,5,11,16,23,30", "backNumbers": "13" },
+  { "issueNo": "2024081", "date": "2024-07-16", "frontNumbers": "8,12,19,22,26,33", "backNumbers": "8" },
+  { "issueNo": "2024080", "date": "2024-07-14", "frontNumbers": "3,6,14,20,24,29", "backNumbers": "15" },
+  { "issueNo": "2024079", "date": "2024-07-11", "frontNumbers": "2,9,15,18,25,31", "backNumbers": "10" },
+  { "issueNo": "2024078", "date": "2024-07-09", "frontNumbers": "5,11,17,21,27,32", "backNumbers": "1" },
+  { "issueNo": "2024077", "date": "2024-07-07", "frontNumbers": "4,7,13,19,22,28", "backNumbers": "12" },
+  { "issueNo": "2024076", "date": "2024-07-04", "frontNumbers": "1,6,10,16,24,33", "backNumbers": "4" },
+  { "issueNo": "2024075", "date": "2024-07-02", "frontNumbers": "8,12,15,20,25,29", "backNumbers": "7" },
+  { "issueNo": "2024074", "date": "2024-06-30", "frontNumbers": "3,9,14,18,23,31", "backNumbers": "11" },
+  { "issueNo": "2024073", "date": "2024-06-27", "frontNumbers": "2,5,11,17,26,32", "backNumbers": "6" }
+]

@@ -7,8 +7,9 @@ import com.lzk.core.log.logI
 import com.lzk.core.mmkv.MMKVManager
 import com.lzk.core.utils.AppUtil
 import com.lzk.core.utils.launch
-import com.lzk.demo.lettin.device.data.RoomDataManager
+import com.lzk.lettin.business.main.data.repository.LotteryRepository
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class MyApp : Application() {
@@ -16,28 +17,26 @@ class MyApp : Application() {
         private const val TAG = "MyApp"
     }
 
+    @Inject
+    lateinit var lotteryRepository: LotteryRepository
+
     override fun onCreate() {
         super.onCreate()
         AppUtil.init(this)
-        // 初始化XLog
         XLogConfig.init(this, BuildConfig.isDebug)
-        // 初始化ARouter
         if (BuildConfig.isDebug) {
-            ARouter.openLog() // 开启日志
-            ARouter.openDebug() // 开启调试模式
+            ARouter.openLog()
+            ARouter.openDebug()
         }
         ARouter.init(this)
-
         MMKVManager.initialize(this)
-        // 初始化 Room 数据库
-        RoomDataManager.init(this)
 
+        // 保证首次启动就有 mock 数据
         launch {
-            AppUtil.crashState.collect {
-                if (it != null) {
-                    logI(TAG, "Crash occurred: ${it.message}")
-                    XLogConfig.flushSync()
-                }
+            runCatching {
+                lotteryRepository.ensureMockDataForAll()
+            }.onFailure {
+                logI(TAG, "ensureMockDataForAll 失败: ${it.message}")
             }
         }
 

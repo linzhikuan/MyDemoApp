@@ -7,7 +7,7 @@ variables:
   ANDROID_HOME: "/opt/android-sdk"
   ANDROID_SDK_ROOT: "/opt/android-sdk"
   JAVA_HOME: "/usr/lib/jvm/java-17-openjdk-amd64"
-  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8 -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process"
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8 -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false"
 
 build:
   stage: build
@@ -15,14 +15,14 @@ build:
   before_script:
     - echo "=== System info ==="
     - uname -a
-    - dpkg --print-architecture
+    - free -m
     - echo "JAVA_HOME=$JAVA_HOME"
     - echo "ANDROID_HOME=$ANDROID_HOME"
     - echo "sdk.dir=$ANDROID_HOME" > local.properties
     - chmod +x ./gradlew
   script:
     - echo "=== Starting build ==="
-    - ./gradlew assembleDebug --no-daemon --stacktrace
+    - ./gradlew assembleDebug --no-daemon --no-parallel --max-workers=2 --stacktrace
   artifacts:
     paths:
       - "**/build/outputs/apk/debug/*.apk"

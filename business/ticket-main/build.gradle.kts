@@ -31,4 +31,20 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // 网络
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // Core modules
+    implementation(project(":core:log"))
+    implementation(project(":core:mmkv"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:database"))
 }
