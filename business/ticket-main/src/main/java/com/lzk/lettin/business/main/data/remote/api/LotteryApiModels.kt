@@ -3,47 +3,56 @@ package com.lzk.lettin.business.main.data.remote.api
 import com.google.gson.annotations.SerializedName
 
 /**
- * 彩票历史开奖接口返回的顶层 JSON 模型。
- * 兼容常见聚合服务的返回结构（如 code/data/list）。
- * 若实际 API 的字段命名不同，只需修改 @SerializedName 即可，
- * 业务层（LotteryDraw / LotteryType）完全不变。
+ * huiniao.top 彩票历史接口顶层 JSON。
+ * 示例：
+ * ```
+ * {
+ *   "code": 1,
+ *   "info": "成功",
+ *   "data": {
+ *     "data": {
+ *       "list": [ { "code":"24049", "day":"2024-02-28", "one":6, "two":3, ... } ],
+ *       "totalCount": 6821,
+ *       ...
+ *     }
+ *   }
+ * }
+ * ```
  */
-data class LotteryApiResponse<T>(
+data class LotteryApiResponse(
     @SerializedName("code") val code: Int = -1,
-    @SerializedName("msg") val msg: String? = null,
-    @SerializedName("data") val data: T? = null,
-    @SerializedName("result") val result: T? = null,
+    @SerializedName("info") val info: String? = null,
+    @SerializedName("data") val data: LotteryOuterData? = null,
 )
 
-/**
- * 一期开奖记录的 JSON 模型。
- * @see com.lzk.lettin.business.main.data.model.LotteryDraw
- */
-data class LotteryDrawDto(
-    @SerializedName("issueNo") val issueNo: String? = null,
-    @SerializedName("issue") val issue: String? = null,
-    @SerializedName("expect") val expect: String? = null,
-    @SerializedName("date") val date: String? = null,
-    @SerializedName("openDate") val openDate: String? = null,
-    @SerializedName("time") val time: String? = null,
-    @SerializedName("frontNumbers") val frontNumbers: String? = null,
-    @SerializedName("red") val red: String? = null,
-    @SerializedName("redBall") val redBall: String? = null,
-    @SerializedName("backNumbers") val backNumbers: String? = null,
-    @SerializedName("blue") val blue: String? = null,
-    @SerializedName("blueBall") val blueBall: String? = null,
-    @SerializedName("poolAmount") val poolAmount: Long? = null,
-    @SerializedName("pool") val pool: Long? = null,
-    @SerializedName("firstCount") val firstCount: Int? = null,
-    @SerializedName("firstPrize") val firstPrize: Long? = null,
-    @SerializedName("secondCount") val secondCount: Int? = null,
-    @SerializedName("secondPrize") val secondPrize: Long? = null,
+data class LotteryOuterData(
+    @SerializedName("data") val data: LotteryListData? = null,
 )
 
-/**
- * 列表型返回值：data: { list: [...] }
- */
 data class LotteryListData(
     @SerializedName("list") val list: List<LotteryDrawDto>? = null,
-    @SerializedName("result") val result: List<LotteryDrawDto>? = null,
+)
+
+/**
+ * huiniao.top 一期开奖记录。
+ * - SSQ：one..six 为红球，seven 为蓝球
+ * - DLT：one..five 为前区，six / seven 为后区（后区共 2 个）
+ * 其他彩种字段统一留空，不影响解析。
+ */
+data class LotteryDrawDto(
+    @SerializedName("code") val issueNo: String? = null,
+    @SerializedName("day") val date: String? = null,
+    @SerializedName("open_time") val openTime: String? = null,
+
+    @SerializedName("one")    val one: Int? = null,
+    @SerializedName("two")    val two: Int? = null,
+    @SerializedName("three")  val three: Int? = null,
+    @SerializedName("four")   val four: Int? = null,
+    @SerializedName("five")   val five: Int? = null,
+    @SerializedName("six")    val six: Int? = null,
+    @SerializedName("seven")  val seven: Int? = null,
+    @SerializedName("eight")  val eight: Int? = null,
+
+    @SerializedName("sales") val sales: Long? = null,
+    @SerializedName("poolmoney") val poolMoney: Long? = null,
 )

@@ -1,8 +1,6 @@
 package com.lzk.lettin.business.main.data
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.lzk.lettin.business.main.data.local.LotteryDatabase
 import com.lzk.lettin.business.main.data.remote.LotteryRemoteDataSource
 import com.lzk.lettin.business.main.data.remote.MockLotteryRemoteDataSource
@@ -24,25 +22,25 @@ import javax.inject.Singleton
 
 /**
  * 数据源的 Hilt 绑定模块。
- * 默认使用 mock 数据以确保首次启动可运行。
- * 要切换到真实 API，请：
- *   1) 把 [USE_REAL_API] 修改为 true
- *   2) 或者修改 [baseUrl] 为实际服务域名/IP
- *   3) 也支持通过外部 BuildConfig 注入 baseUrl（推荐）
+ *
+ * 当前接入：huiniao.top（完全免费、无需注册）
+ *   - baseUrl：【LOTTERY_BASE_URL】
+ *   - 历史接口：/interface/home/lotteryHistory?type=ssq|dlt&limit=30
+ *
+ * 若以后需要切换到其他服务商（如聚合数据、极速数据、istero 等），
+ * 只需修改 LOTTERY_BASE_URL + LotteryApiModels 的 @SerializedName 字段即可，
+ * 业务层 / ViewModel / UI 都不需要改动。
  */
 @Module
 @InstallIn(SingletonComponent::class)
 object LotteryDataModule {
 
-    /** true 时走真实网络 API；false 时走本地 assets mock。 */
-    private const val USE_REAL_API = false
+    // 填真实彩票开奖 API 的 baseUrl。
+    // 当前使用 huiniao.top 的免费 HTTPS 线路。
+    private const val LOTTERY_BASE_URL = "https://api.huiniao.top/"
 
-    /** 默认的 baseUrl。可按需替换。也可改为从 BuildConfig.LOTTERY_BASE_URL 注入。 */
-    private const val DEFAULT_BASE_URL = "https://api.example.com/"
-
-    @Provides
-    @Singleton
-    fun provideGson(): Gson = GsonBuilder().serializeNulls().create()
+    // 是否启用真实 API。baseUrl 非空即启用。
+    private fun shouldUseRealApi(): Boolean = LOTTERY_BASE_URL.isNotEmpty()
 
     @Provides
     @Singleton
@@ -60,11 +58,11 @@ object LotteryDataModule {
 
     @Provides
     @Singleton
-    fun provideLotteryApi(client: OkHttpClient, gson: Gson): LotteryApi {
+    fun provideLotteryApi(client: OkHttpClient): LotteryApi {
         return Retrofit.Builder()
-            .baseUrl(DEFAULT_BASE_URL)
+            .baseUrl(LOTTERY_BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LotteryApi::class.java)
     }
@@ -80,10 +78,11 @@ object LotteryDataModule {
         @ApplicationContext context: Context,
         api: LotteryApi,
     ): LotteryRemoteDataSource {
-        return if (USE_REAL_API) {
+        return if (shouldUseRealApi()) {
             RealLotteryRemoteDataSource(api = api, ioDispatcher = Dispatchers.IO)
         } else {
-            MockLotteryRemoteDataSource(context, provideGson())
+            // 兼容 fallback：如果 baseUrl 留空，走本地 assets mock 数据
+            MockLotteryRemoteDataSource(context, com.google.gson.Gson())
         }
     }
 

@@ -38,9 +38,9 @@ dependencies {
 
     // 网络
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Core modules
     implementation(project(":core:log"))
